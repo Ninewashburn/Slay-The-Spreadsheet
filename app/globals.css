@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+
+/* Tokens de la direction artistique — identiques au proto de référence
+   (docs/proto-espoir-v5.html). Le jeu ressemble à ce qu'il parodie :
+   un logiciel RH. Coins arrondis, bleus doux, joie stérile du SaaS. */
+:root {
+  --bg: #f5f7fa;
+  --panel: #ffffff;
+  --ink: #1c2333;
+  --muted: #6b7686;
+  --blue: #3d6be0;
+  --blue-soft: #e8edfb;
+  --corail: #ff8a65;
+  --gold: #e8a63d;
+  --green: #2e9e6d;
+  --green-soft: #e4f5ee;
+  --danger: #8b1a1a;
+  --danger-bright: #dc2626;
+  --line: #e3e7ef;
+  --radius: 18px;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proto v5 — Espoir</title>
+<style>
+  :root {
+    --bg: #F5F7FA;
+    --panel: #FFFFFF;
+    --ink: #1C2333;
+    --muted: #6B7686;
+    --blue: #3D6BE0;
+    --blue-soft: #E8EDFB;
+    --corail: #FF8A65;
+    --gold: #E8A63D;
+    --green: #2E9E6D;
+    --green-soft: #E4F5EE;
+    --danger: #8B1A1A;
+    --danger-bright: #DC2626;
+    --line: #E3E7EF;
+    --radius: 18px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  #app {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--bg);
+  }
+
+  header {
+    padding: 14px 20px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+
+  .status-row { display: flex; gap: 6px; }
+
+  .pill {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  .pill.energy { color: var(--blue); border-color: #C9D8F7; }
+
+  .subheader {
+    padding: 4px 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .offer-req {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    background: #FFF6E8;
+    border: 1px solid #F0DDBC;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  .deck-info { font-size: 11px; color: var(--muted); }
+
+  .counter-zone {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0 24px;
+    min-height: 0;
+  }
+
+  .eyebrow { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+
+  .hope-number {
+    font-size: 76px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--blue);
+    transition: color 0.4s ease;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hope-number.warm { color: var(--gold); text-shadow: 0 0 24px rgba(232,166,61,0.35); }
+  .hope-number.hot { color: var(--corail); text-shadow: 0 0 32px rgba(255,138,101,0.45); }
+  .hope-number.bump { animation: bump 0.35s ease; }
+
+  @keyframes bump {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.14); }
+    100% { transform: scale(1); }
+  }
+
+  .hope-number.shatter { animation: shatter 0.55s cubic-bezier(.36,.07,.19,.97); }
+
+  @keyframes shatter {
+    0% { transform: scale(1) rotate(0deg); filter: blur(0); opacity: 1; }
+    30% { transform: scale(1.05) rotate(-2deg); }
+    55% { transform: scale(0.9) rotate(3deg); filter: blur(1px); }
+    75% { transform: scale(0.7) rotate(-4deg); filter: blur(2px); opacity: 0.4; }
+    100% { transform: scale(0.55) rotate(0deg); filter: blur(0); opacity: 1; }
+  }
+
+  .shake { animation: shake 0.4s ease; }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(3px); }
+  }
+
+  .target-chip {
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .target-chip b { color: var(--ink); }
+  .target-chip.reached { color: var(--green); }
+  .target-chip.reached b { color: var(--green); }
+
+  .subline { margin-top: 8px; font-size: 13px; color: var(--muted); min-height: 18px; text-align: center; max-width: 280px; }
+  .subline.risk { color: var(--corail); font-weight: 600; }
+
+  .word-flash {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; opacity: 0; z-index: 20;
+  }
+  .word-flash.show { animation: flashIn 1.1s ease forwards; }
+
+  @keyframes flashIn {
+    0% { opacity: 0; transform: scale(0.9); }
+    15% { opacity: 1; transform: scale(1); }
+    70% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.02); }
+  }
+
+  .word-flash span {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 42px; font-weight: 700;
+    color: var(--danger-bright);
+  }
+
+  .turn-flash {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; opacity: 0; z-index: 20;
+  }
+  .turn-flash.show { animation: turnIn 0.9s ease forwards; }
+
+  @keyframes turnIn {
+    0% { opacity: 0; }
+    30% { opacity: 1; }
+    75% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .turn-flash span {
+    font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--green); background: var(--green-soft);
+    padding: 8px 16px; border-radius: 999px;
+  }
+
+  .hand {
+    padding: 8px 14px 4px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    min-height: 108px;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 10px 10px 9px;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+    box-shadow: 0 1px 2px rgba(20,30,60,0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(61,107,224,0.14); }
+  .card:active:not(:disabled) { transform: translateY(-1px) scale(0.98); }
+  .card:disabled { opacity: 0.3; cursor: default; }
+
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 4px; }
+  .card-cost {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--line);
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-label { font-size: 11.5px; font-weight: 600; line-height: 1.3; color: var(--ink); }
+  .card-effect {
+    font-size: 10.5px; font-weight: 700; color: var(--blue);
+    background: var(--blue-soft); display: inline-block;
+    padding: 2px 7px; border-radius: 999px;
+    align-self: flex-start;
+  }
+  .card-effect.neutral { color: var(--green); background: var(--green-soft); }
+  /* L'aperçu qui franchit le seuil : la carte te montre la sortie. */
+  .card-effect.goal { color: #fff; background: var(--green); }
+  .card-effect { font-variant-numeric: tabular-nums; }
+
+  .actions {
+    padding: 8px 16px 6px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-pass, .btn-end {
+    flex: 1;
+    border: none;
+    border-radius: var(--radius);
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .btn-pass {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .btn-pass:hover:not(:disabled) { background: #EEF1F6; }
+  .btn-pass:disabled { opacity: 0.3; cursor: default; }
+
+  .btn-end { background: var(--ink); color: white; }
+  .btn-end:disabled { opacity: 0.3; }
+  .btn-end:hover:not(:disabled) { background: #2A3346; }
+
+  footer { padding: 4px 20px 16px; text-align: center; }
+  .reset { font-size: 12px; color: var(--muted); background: none; border: none; text-decoration: underline; cursor: pointer; }
+
+  .endscreen {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 50; opacity: 0; pointer-events: none; transition: opacity 1.1s ease;
+  }
+  .endscreen.show { opacity: 1; pointer-events: auto; }
+
+  .endscreen h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 26px; line-height: 1.4; letter-spacing: 0.03em;
+    text-align: center; max-width: 360px; margin: 0 0 12px; opacity: 0;
+    padding: 0 20px;
+  }
+  .endscreen p {
+    font-size: 13px; text-align: center; max-width: 300px;
+    margin: 0 0 28px; opacity: 0; line-height: 1.6;
+  }
+  .endscreen.show h1 { animation: fadeUp 1.4s ease 0.4s forwards; }
+  .endscreen.show p { animation: fadeUp 1.4s ease 0.9s forwards; }
+
+  @keyframes fadeUp {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .endscreen button {
+    opacity: 0; background: none; border: 1px solid #3A3F4B;
+    font-size: 12px; padding: 8px 18px; border-radius: 999px; cursor: pointer;
+  }
+  .endscreen.show button { animation: fadeUp 1s ease 2s forwards; }
+
+  #screenLost { background: #05070C; }
+  #screenLost h1 { color: var(--danger-bright); }
+  #screenLost p { color: #6B7280; }
+  #screenLost button { color: #8A93A6; }
+
+  #screenWon { background: #0B1710; }
+  #screenWon h1 { color: #6EE7B7; }
+  #screenWon p { color: #5F8272; }
+  #screenWon button { border-color: #2D4A3C; color: #7FA893; }
+
+  #screenPassive { background: #E9EBEE; }
+  #screenPassive h1 {
+    color: #9AA1AD;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0;
+  }
+  #screenPassive p { color: #ABB1BC; }
+  #screenPassive button { border-color: #C6CBD4; color: #9AA1AD; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <div class="brand">Slay the Spreadsheet</div>
+    <div class="status-row">
+      <div class="pill" id="turnPill">Tour 1 / 5</div>
+      <div class="pill energy" id="energyPill">⚡ 3</div>
+    </div>
+  </header>
+
+  <div class="subheader">
+    <div class="offer-req" id="offerReq">L'offre exige : 45 d'Espoir</div>
+    <div class="deck-info" id="deckInfo">Pioche 9 · Défausse 0</div>
+  </div>
+
+  <div class="counter-zone">
+    <div class="eyebrow">Espoir</div>
+    <div class="hope-number" id="hopeNumber">0</div>
+    <div class="target-chip" id="targetChip"><b>0</b> / 45 exigés à la fin</div>
+    <div class="subline" id="subline">Vous commencez à postuler.</div>
+    <div class="word-flash" id="wordFlash"><span id="wordText"></span></div>
+    <div class="turn-flash" id="turnFlash"><span id="turnText"></span></div>
+  </div>
+
+  <div class="hand" id="hand"></div>
+
+  <div class="actions">
+    <button class="btn-pass" id="passBtn">Passer le tour</button>
+    <button class="btn-end" id="endBtn">Terminer le tour</button>
+  </div>
+
+  <footer>
+    <button class="reset" onclick="resetRun()">recommencer</button>
+  </footer>
+
+  <div class="endscreen" id="screenLost">
+    <h1 id="lostTitle"></h1>
+    <p id="lostDetail"></p>
+    <button onclick="resetRun()">recommencer</button>
+  </div>
+
+  <div class="endscreen" id="screenWon">
+    <h1>ENTRETIEN<br>CONFIRMÉ</h1>
+    <p id="wonDetail"></p>
+    <button onclick="resetRun()">rejouer</button>
+  </div>
+
+  <div class="endscreen" id="screenPassive">
+    <h1>Vous n'avez rien risqué.</h1>
+    <p>Vous n'avez rien obtenu non plus.</p>
+    <button onclick="resetRun()">recommencer</button>
+  </div>
+
+<script>
+/* ============================================================
+   MOTEUR v4 — deux ajouts structurels :
+   1. LE SEUIL : le blind exige un Espoir FINAL ≥ 45.
+      L'Espoir redevient un score, pas seulement une dette.
+   2. LA PIOCHE : deck de 12 cartes (avec doublons), main de 3
+      repiochée chaque tour, défausse remélangée quand vide.
+      Plus jamais de tours morts.
+   ============================================================ */
+
+const CATALOG = {
+  // Règle d'information : ton côté de la table est PRÉCIS (aperçu calculé),
+  // leur côté reste du BROUILLARD (le risque n'affiche jamais un pourcentage).
+  entretien:   { name: "L'entretien s'est très bien passé", cost: 1, cls: '',
+    previewHope: s => s.hope === 0 ? 16 : s.hope * 2,
+    apply: s => { const h = s.hope === 0 ? 16 : s.hope * 2;
+                  return { ...s, hope: h, hopeGeneratedTotal: s.hopeGeneratedTotal + Math.max(0, h - s.hope) }; } },
+  poste:       { name: 'Le poste correspond exactement', cost: 2, cls: '',
+    previewHope: s => s.hope === 0 ? 24 : s.hope * 3,
+    apply: s => { const h = s.hope === 0 ? 24 : s.hope * 3;
+                  return { ...s, hope: h, hopeGeneratedTotal: s.hopeGeneratedTotal + Math.max(0, h - s.hope) }; } },
+  candidature: { name: 'Candidature envoyée', cost: 1, cls: '',
+    previewHope: s => s.hope + 8,
+    apply: s => ({ ...s, hope: s.hope + 8, hopeGeneratedTotal: s.hopeGeneratedTotal + 8 }) },
+  motcle:      { name: 'Mot-clé Exact', cost: 1, cls: 'neutral', effectLabel: 'réduit la prochaine casse',
+    apply: s => ({ ...s, shieldActive: true }) },
+  relance:     { name: 'Relance polie', cost: 1, cls: 'neutral', effectLabel: '− risque ce tour',
+    apply: s => ({ ...s, riskModifier: s.riskModifier * 0.6 }) },
+};
+
+const DECKLIST = [
+  ['entretien', 3],
+  ['poste', 2],
+  ['candidature', 2],
+  ['motcle', 3],
+  ['relance', 2],
+];
+
+const MAX_TURNS = 5;
+const ENERGY_MAX = 3;
+const HAND_SIZE = 3;
+const SEUIL = 45;
+const HOPE_ENGAGEMENT_THRESHOLD = 20;
+
+const DEATH_LINES = {
+  shattered: 'NOUS AVONS RETENU<br>UN AUTRE PROFIL',
+  belowSeuil: 'NOUS AVONS REÇU<br>DE TRÈS NOMBREUSES<br>CANDIDATURES',
+};
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildDeck() {
+  let uid = 0;
+  const deck = [];
+  DECKLIST.forEach(([key, count]) => {
+    for (let i = 0; i < count; i++) deck.push({ uid: 'c' + (uid++), key });
+  });
+  return shuffle(deck);
+}
+
+function draw(s, n) {
+  let drawPile = [...s.drawPile];
+  let discardPile = [...s.discardPile];
+  let hand = [...s.hand];
+  for (let i = 0; i < n; i++) {
+    if (drawPile.length === 0) {
+      if (discardPile.length === 0) break;
+      drawPile = shuffle(discardPile);
+      discardPile = [];
+    }
+    hand.push(drawPile.shift());
+  }
+  return { ...s, drawPile, discardPile, hand };
+}
+
+function initialState() {
+  const base = {
+    hope: 0,
+    hopeGeneratedTotal: 0,
+    energy: ENERGY_MAX,
+    turn: 1,
+    drawPile: buildDeck(),
+    discardPile: [],
+    hand: [],
+    playedThisTurn: false,
+    shieldActive: false,
+    riskModifier: 1,
+    breaksCount: 0,
+    status: 'playing',       // 'playing' | 'won' | 'lost' | 'passive'
+    lostReason: null,        // 'shattered' | 'belowSeuil'
+    lastBreakFrom: null,
+  };
+  return draw(base, HAND_SIZE);
+}
+
+let state = initialState();
+
+function computeRisk(s) {
+  return Math.min(0.85, s.hope / 130) * s.riskModifier;
+}
+
+function reduce(s, action) {
+  if (s.status !== 'playing') return s;
+
+  switch (action.type) {
+    case 'PLAY_CARD': {
+      const idx = s.hand.findIndex(c => c.uid === action.uid);
+      if (idx === -1) return s;
+      const inst = s.hand[idx];
+      const card = CATALOG[inst.key];
+      if (card.cost > s.energy) return s;
+      const after = card.apply(s);
+      return {
+        ...after,
+        energy: after.energy - card.cost,
+        hand: after.hand.filter(c => c.uid !== inst.uid),
+        discardPile: [...after.discardPile, inst],
+        playedThisTurn: true,
+      };
+    }
+    case 'PASS_TURN':
+      // Passer = ne pas se manifester ce tour. Interdit si une carte a déjà été jouée
+      // (sinon "jouer puis passer" dominerait strictement "terminer").
+      if (s.playedThisTurn) return s;
+      return resolveTurnEnd({ ...s, riskModifier: s.riskModifier * 0.4 }, action.roll);
+    case 'END_TURN':
+      return resolveTurnEnd(s, action.roll);
+  }
+  return s;
+}
+
+function resolveTurnEnd(s, roll) {
+  const risk = computeRisk(s);
+  const triggered = roll < risk;
+
+  let next = s;
+  if (triggered) {
+    const before = next.hope;
+    const reduction = next.shieldActive ? 0.35 : 0.1;
+    next = {
+      ...next,
+      hope: Math.floor(next.hope * reduction),
+      shieldActive: false,
+      breaksCount: next.breaksCount + 1,
+      lastBreakFrom: before,
+    };
+    if (next.breaksCount >= 2) {
+      return { ...next, status: 'lost', lostReason: 'shattered' };
+    }
+  } else {
+    next = { ...next, lastBreakFrom: null };
+  }
+
+  const turnDone = next.turn + 1;
+
+  // Fin de run : le SEUIL est vérifié APRÈS le dernier jet — le dernier mail
+  // peut encore arriver. C'est cruel, et c'est exact.
+  if (turnDone > MAX_TURNS) {
+    if (next.hope >= SEUIL) return { ...next, turn: turnDone, status: 'won' };
+    if (next.hopeGeneratedTotal < HOPE_ENGAGEMENT_THRESHOLD) return { ...next, turn: turnDone, status: 'passive' };
+    return { ...next, turn: turnDone, status: 'lost', lostReason: 'belowSeuil' };
+  }
+
+  // Nouveau tour : main défaussée, 3 nouvelles cartes, riskModifier remis à 1
+  // inconditionnellement (correctif conservé du v3), énergie pleine.
+  let advanced = {
+    ...next,
+    turn: turnDone,
+    energy: ENERGY_MAX,
+    riskModifier: 1,
+    playedThisTurn: false,
+    discardPile: [...next.discardPile, ...next.hand],
+    hand: [],
+  };
+  return draw(advanced, HAND_SIZE);
+}
+
+/* ============================================================
+   UI — inchangée dans son rôle : lit le state, fournit le roll.
+   ============================================================ */
+
+const hopeEl = document.getElementById('hopeNumber');
+const sublineEl = document.getElementById('subline');
+const turnPill = document.getElementById('turnPill');
+const energyPill = document.getElementById('energyPill');
+const passBtn = document.getElementById('passBtn');
+const endBtn = document.getElementById('endBtn');
+const handEl = document.getElementById('hand');
+const deckInfoEl = document.getElementById('deckInfo');
+const targetChipEl = document.getElementById('targetChip');
+
+let animating = false;
+
+function effectLabelFor(inst) {
+  const card = CATALOG[inst.key];
+  if (!card.previewHope) return { text: card.effectLabel, goal: false };
+  const target = card.previewHope(state);
+  const goal = target >= SEUIL;
+  return { text: Math.round(state.hope) + ' → ' + Math.round(target) + (goal ? ' ✓' : ''), goal };
+}
+
+function renderHand() {
+  handEl.innerHTML = '';
+  state.hand.forEach(inst => {
+    const card = CATALOG[inst.key];
+    const btn = document.createElement('button');
+    btn.className = 'card';
+    btn.disabled = state.status !== 'playing' || animating || card.cost > state.energy;
+    const label = effectLabelFor(inst);
+    btn.innerHTML =
+      '<div class="card-top"><div class="card-label">' + card.name + '</div>' +
+      '<div class="card-cost">' + card.cost + '</div></div>' +
+      '<div class="card-effect ' + card.cls + (label.goal ? ' goal' : '') + '">' + label.text + '</div>';
+    btn.onclick = () => dispatch({ type: 'PLAY_CARD', uid: inst.uid });
+    handEl.appendChild(btn);
+  });
+}
+
+function render() {
+  hopeEl.textContent = Math.round(state.hope);
+  hopeEl.classList.remove('warm', 'hot');
+  if (state.hope >= 60) hopeEl.classList.add('hot');
+  else if (state.hope >= 20) hopeEl.classList.add('warm');
+
+  targetChipEl.innerHTML = '<b>' + Math.round(state.hope) + '</b> / ' + SEUIL + ' exigés à la fin';
+  targetChipEl.classList.toggle('reached', state.hope >= SEUIL);
+
+  turnPill.textContent = 'Tour ' + Math.min(state.turn, MAX_TURNS) + ' / ' + MAX_TURNS;
+  energyPill.textContent = '⚡ ' + state.energy;
+  deckInfoEl.textContent = 'Pioche ' + state.drawPile.length + ' · Défausse ' + state.discardPile.length;
+
+  passBtn.disabled = state.status !== 'playing' || animating || state.playedThisTurn;
+  endBtn.disabled = state.status !== 'playing' || animating;
+
+  renderHand();
+  updateRiskLabel();
+}
+
+function updateRiskLabel() {
+  const p = computeRisk(state);
+  sublineEl.classList.remove('risk');
+  if (state.lastBreakFrom !== null) { sublineEl.textContent = 'Vous étiez à ' + state.lastBreakFrom + '.'; return; }
+  if (state.hope <= 0) { sublineEl.textContent = "Rien à perdre pour l'instant."; return; }
+  if (p < 0.15) sublineEl.textContent = 'Ça reste raisonnable.';
+  else if (p < 0.4) sublineEl.textContent = 'Vous sentez un léger doute.';
+  else if (p < 0.65) { sublineEl.textContent = 'Quelque chose pourrait mal tourner.'; sublineEl.classList.add('risk'); }
+  else { sublineEl.textContent = 'Vous y croyez peut-être un peu trop.'; sublineEl.classList.add('risk'); }
+}
+
+function bump() {
+  hopeEl.classList.remove('bump');
+  void hopeEl.offsetWidth;
+  hopeEl.classList.add('bump');
+}
+
+function dispatch(action) {
+  if (animating) return;
+  const prev = state;
+  const next = reduce(state, action);
+  if (next === prev) return;
+
+  if (action.type === 'PLAY_CARD') {
+    state = next;
+    bump();
+    render();
+    return;
+  }
+
+  const broke = next.breaksCount > prev.breaksCount;
+  animating = true;
+  passBtn.disabled = true;
+  endBtn.disabled = true;
+
+  if (broke) {
+    showWord();
+    setTimeout(() => {
+      const zone = document.querySelector('.counter-zone');
+      hopeEl.classList.remove('bump');
+      hopeEl.classList.add('shatter');
+      zone.classList.add('shake');
+      setTimeout(() => {
+        hopeEl.classList.remove('shatter');
+        zone.classList.remove('shake');
+        state = next;
+        animating = false;
+        render();
+        maybeShowEnd();
+      }, 600);
+    }, 750);
+  } else {
+    const flash = document.getElementById('turnFlash');
+    const flashText = document.getElementById('turnText');
+    flashText.textContent = action.type === 'PASS_TURN' ? 'Vous avez laissé passer' : 'Tour suivant';
+    flash.classList.remove('show');
+    void flash.offsetWidth;
+    flash.classList.add('show');
+    setTimeout(() => {
+      state = next;
+      animating = false;
+      render();
+      maybeShowEnd();
+    }, 500);
+  }
+}
+
+function showWord() {
+  const word = document.getElementById('wordFlash');
+  const wordText = document.getElementById('wordText');
+  const words = ['Cependant…', 'Toutefois…', 'Malheureusement…'];
+  wordText.textContent = words[Math.floor(Math.random() * words.length)];
+  word.classList.remove('show');
+  void word.offsetWidth;
+  word.classList.add('show');
+  sublineEl.textContent = '';
+}
+
+function maybeShowEnd() {
+  if (state.status === 'playing') return;
+  const delay = 900;
+  if (state.status === 'lost') {
+    document.getElementById('lostTitle').innerHTML = DEATH_LINES[state.lostReason];
+    document.getElementById('lostDetail').textContent =
+      state.lostReason === 'belowSeuil'
+        ? 'Dossier final : ' + Math.round(state.hope) + " — l'offre exigeait " + SEUIL + '.'
+        : '';
+    setTimeout(() => document.getElementById('screenLost').classList.add('show'), delay);
+  } else if (state.status === 'won') {
+    document.getElementById('wonDetail').textContent =
+      'Dossier final : ' + Math.round(state.hope) + ' / ' + SEUIL + ' exigés.';
+    setTimeout(() => document.getElementById('screenWon').classList.add('show'), delay);
+  } else if (state.status === 'passive') {
+    setTimeout(() => document.getElementById('screenPassive').classList.add('show'), delay);
+  }
+}
+
+function resetRun() {
+  state = initialState();
+  animating = false;
+  ['screenLost', 'screenWon', 'screenPassive'].forEach(id =>
+    document.getElementById(id).classList.remove('show'));
+  sublineEl.textContent = 'Vous commencez à postuler.';
+  render();
+}
+
+passBtn.onclick = () => dispatch({ type: 'PASS_TURN', roll: Math.random() });
+endBtn.onclick = () => dispatch({ type: 'END_TURN', roll: Math.random() });
+
+render();
+</script>
+</body>
+</html>
