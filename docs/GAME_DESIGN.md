@@ -259,3 +259,19 @@ façon Hearthstone rempli de contenu corporate) — gag à un coup qui casserait
 le déadpan en jeu de base ; envisageable uniquement comme easter egg ou
 récompense de succès caché, la référence en étage bonus, jamais en plancher
 (CLAUDE.md §3 et §6).
+
+**Parqué (idées reprises du brutalisme terminal, adaptées à la peau SaaS)** :
+trois patterns volés à un site outil-dev (fantasy-stack de wasp.sh), transposés
+sans en garder l'habillage terminal (réservé aux développeurs — hors cible §3).
+- Carte de partage en fin de run (V1) : image PNG générée côté client
+  (« Dossier final : 12 / 45. NOUS AVONS REÇU DE TRÈS NOMBREUSES CANDIDATURES »),
+  postable en un clic. Moteur viral naturel pour un jeu dont le test qualité est
+  « un recruteur doit pouvoir le partager ». Le RNG seedé donne l'ID de run à
+  mettre sur la carte (daily run gratuit).
+- Panneau d'inspection au survol : survoler une carte / l'offre / le blind
+  affiche ses « notes de dossier » dans un panneau latéral (le geste
+  d'inspection de Papers Please). Peut enrichir la colonne d'activité existante.
+- Le monospace comme voix de machine : l'ATS étant un logiciel, son écran de
+  mort « CANDIDATURE NON RETENUE » en chasse fixe (froid, automatique) contre
+  la Georgia du Recruteur = caractérisation gratuite par la typo. Candidat à
+  entrer dès la tâche 2 (l'écran de mort de l'ATS est déjà au programme).
