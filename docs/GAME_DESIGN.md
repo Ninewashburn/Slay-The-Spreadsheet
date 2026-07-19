@@ -70,7 +70,7 @@ caractérisation — le silence n'est lisible que parce que l'autre parle.
 | **Le Poste Fictif** | L'offre n'a jamais été ouverte. Pas de résolution possible. | (information neutre, ticket fermé) |
 | **Le Manager qui a Pris un Senior** | Tout réussi, défaite scriptée. **L'UNIQUE boss sans sortie du jeu** — sa ligne est la plus humaine : | « NOUS AVONS RETENU UN AUTRE PROFIL » (politesse comparative : on ne te dit pas que tu étais mauvais, on te dit qu'il y avait mieux) |
 
-### Blinds vécus (V1.5) — extraits de 7 histoires réelles, 7 causes de mort distinctes, zéro méchant
+### Blinds vécus (V1.5) — extraits de 8 histoires réelles, 8 causes de mort distinctes, zéro méchant
 | Blind | Origine | Règle | Ligne de mort |
 |---|---|---|---|
 | **Le Gel Budgétaire** | « Je vous prends, je ne sais pas quand » puis silence | Victoire à 100 % possible — et défaite quand même, sur une variable hors-champ, sans auteur. Le jeu n'annonce jamais la défaite. | « La bonne nouvelle : le poste est à vous. La mauvaise : nous ne savons pas quand. » puis rien |
@@ -80,6 +80,7 @@ caractérisation — le silence n'est lisible que parce que l'autre parle.
 | **L'Entretien Différé** | Questionnaire 15 min justifié + vidéo → refus sans entretien | Chaque étape coûte de l'Énergie et **paie en Espoir** ; la récompense d'une étape est le droit de payer la suivante. Le seul blind qui FABRIQUE ta vulnérabilité au lieu de l'exploiter. Le mot lui-même ment : un « entretien » sans personne. | « Nous vous remercions du temps que vous avez consacré à ce processus. » |
 | **Le Marathon** | Technique validée, éliminé sur des signes de stress en fin d'entretien long | Le SEUL blind dont le risque dépend du TEMPS, pas de l'Espoir : `computeRisk = f(turn)`. Il offre plus de tours que nécessaire (seuil atteignable en 4, il en donne 8) — le piège est de les utiliser. Le critère réel n'est jamais annoncé. Leçon apprise en jouant : finis vite, pars. | « Nous avons perçu quelques signes de nervosité en fin d'échange. » |
 | **Le Doute** | Rituel qualités/défauts (« Si vous étiez un animal ? »), une phrase honnête → « on a tiqué », débrief des jours après | Un flag caché IRRÉVERSIBLE, posé par une seule carte — et le jeu ne dit pas laquelle ni quand : on l'apprend à l'écran de fin. Les déclencheurs sont les cartes HONNÊTES (Le Trou de CV Expliqué, la transparence) — bonnes partout ailleurs, fatales ici. La valeur d'une carte est contextuelle (cf. Le Diplôme). Aucune carte ne retire le doute. | « S'il y a un doute, c'est qu'il n'y a pas de doute. » |
+| **Le Consultant Loyal** | Deux interlocuteurs de la même organisation, deux postures opposées sur la même info : la RH nomme le client spontanément, le Consultant (loyal à un ami côté client) ne le mentionne jamais | Deux phases, pas un seuil probabiliste. Phase RH : révèle « Client : [nom fictif générique] ». Phase Consultant : ne révèle rien ; l'action **Reprendre l'info** (1 Énergie) force le sujet en citant la RH et débloque de la visibilité PURE — zéro Espoir, zéro garantie. Le tell n'est pas un détail annexe : c'est l'INCOHÉRENCE entre les deux interlocuteurs. Défaite pré-arbitrée par la loyauté, possible même en forçant la question correctement. | « Le poste a été confié à un profil recommandé en interne. » |
 
 Leçon commune Gel/Relais : *parfois on perd contre une horloge, pas contre un
 adversaire* — l'horloge en amont (budget) ou en aval (dossier qui chemine).
@@ -91,10 +92,24 @@ travail gratuit exigé avant qu'un humain apparaisse. Ne PAS créer de carte
 « code une feature » (ça ne parle qu'aux devs) — la version universelle est
 déjà le blind (questionnaire + vidéo), que le boulanger a vécue aussi.
 
+**Mécanique du Consultant Loyal** (nouvelle action « Reprendre l'info ») : forcer
+la question ne rapporte que de l'INFORMATION, jamais de l'Espoir ni une garantie.
+C'est le cœur de l'histoire source : poser une question qu'on ne devrait pas
+avoir à poser, et découvrir que même la bonne réponse n'aurait rien changé (la
+décision était prise en amont, hors de l'entretien). Distinct du Doute : là, le
+flag est caché dans une carte honnête ; ici, le signal est VISIBLE dès la 2e run,
+dans le désaccord entre la RH et le Consultant. Techniquement, « Reprendre
+l'info » est une action au même titre que Partir (Ghosteur) — support moteur à
+prévoir en V1.5.
+
 **Relique associée (méta-run, long terme)** : *Ancien Contact* — jouable sur une
 offre déjà croisée dans une run passée. Effet variable, non garanti : parfois la
 porte s'ouvre, parfois rien (l'autorité a une durée de vie et expire hors-écran,
-sans prévenir — « il n'a plus de pouvoir de recrutement »).
+sans prévenir — « il n'a plus de pouvoir de recrutement »). Variante de lecture :
+si l'offre revient TRÈS vite (quelques runs) et À L'IDENTIQUE, ce n'est pas une
+seconde chance ambiguë mais un signal plus sombre — soit le poste n'a jamais
+tenu, soit le process ne visait jamais vraiment à recruter. Le joueur apprend à
+lire ce signal avec l'expérience (savoir, pas texte explicatif — cohérent §10).
 
 ### Actes II+ (parqués)
 ESN (« Le client cherche surtout quelqu'un de polyvalent » → transforme les
