@@ -93,6 +93,23 @@ dans cet ordre : CLAUDE.md > ROADMAP.md > GAME_DESIGN.md.
   stérile des dashboards. Style d'illustration cible : Corporate Memphis.
 - **Interdit** : fantasy, plateau de jeu, ornements Hearthstone. Le jeu ne doit
   jamais « avouer être un jeu » visuellement.
+- **Corporate ne veut pas dire terne.** Cible = SaaS maîtrisé (Linear, Stripe,
+  Notion), pas SaaS pauvre : couleur affirmée, hiérarchie nette, densité
+  satisfaisante, ombres légères, typo affirmée sur les boutons. Le piège
+  symétrique de la fantasy, c'est le « morpion sur une grille Word » — gris et
+  vide. Les tokens du proto v5 ne doivent jamais être aplatis.
+- Le compteur d'Espoir garde sa **palette d'états** : bleu → doré → corail selon
+  le niveau. Jamais noir plat.
+- **Lisibilité façon UNO** : code couleur par TYPE de carte, lisible d'un coup
+  d'œil (bleu = gonfle l'Espoir, vert = utilitaire, 3e teinte = piège /
+  malédiction). C'est la seule chose à voler aux jeux de cartes grand public :
+  la lecture instantanée par la couleur, jamais le décor.
+- **Pas de mascotte** façon Duolingo (ça avoue « jeu »). Mais voler la
+  *sensation* Duolingo : le micro-feedback (bump, son, transition ~200 ms) qui
+  rend addictive une tâche administrative — le compteur d'Espoir le fait déjà.
+  La seule chaleur « personnage » autorisée a une adresse unique : le Recruteur
+  LinkedIn (PNJ récurrent, GAME_DESIGN §11), avatar générique, jamais un hibou
+  attachant.
 - Le juice est du **motion design d'interface** (Framer Motion) : un chiffre qui
   grimpe, un mot qui tombe, une carte qui glisse. **Pas de Three.js** — rien ici
   ne demande une caméra.

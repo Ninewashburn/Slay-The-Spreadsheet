@@ -84,6 +84,13 @@ caractérisation — le silence n'est lisible que parce que l'autre parle.
 Leçon commune Gel/Relais : *parfois on perd contre une horloge, pas contre un
 adversaire* — l'horloge en amont (budget) ou en aval (dossier qui chemine).
 
+**Variantes de L'Entretien Différé** (mêmes règles, pas de nouveau boss) : le
+test technique « une feature entière à coder gratuitement » et le recrutement
+« par simulation / mise en situation » qui n'aboutit pas. Même structure :
+travail gratuit exigé avant qu'un humain apparaisse. Ne PAS créer de carte
+« code une feature » (ça ne parle qu'aux devs) — la version universelle est
+déjà le blind (questionnaire + vidéo), que le boulanger a vécue aussi.
+
 **Relique associée (méta-run, long terme)** : *Ancien Contact* — jouable sur une
 offre déjà croisée dans une run passée. Effet variable, non garanti : parfois la
 porte s'ouvre, parfois rien (l'autorité a une durée de vie et expire hors-écran,
@@ -96,6 +103,13 @@ contré), Junior avec 5 ans d'expérience (conditions contradictoires par design
 Manager Pressé (« Je n'ai eu que cinq minutes » → ignore les cartes puissantes),
 La Cascade N1/N2/N3, Le Panel (trois interlocuteurs, un valide, un invalide, le
 troisième observait).
+
+### Événements d'ambiance (entre deux blinds, V1.5)
+Pas des blinds : des interruptions courtes pendant la recherche (concrétise la
+piste « caméra café »). **Le Webinaire** — « Boostez votre carrière avec l'IA ».
+Te sollicite, coûte de l'Énergie (ton temps), ne donne rien ou une carte
+cosmétique (cf. Bannière Nébuleuse). La niche du conseil-carrière se nourrit de
+ta détresse sans la résoudre. Vise le processus, jamais les personnes.
 
 ## 6. Les cartes
 
@@ -140,6 +154,17 @@ Télétravail Partiel) · **« On est une famille »** (+Espoir, **verrouille
 l'action Partir** — on ne quitte pas sa famille ; te retire ta seule victoire
 contre le Ghosteur).
 
+**Pas les bons codes / réseau** (à trancher) — l'inversion de Cooptation : et si
+l'ABSENCE de réseau était un débuff, plutôt que Cooptation un buff ? Deux angles
+sur la même vérité. Forme forte à tester : sans carte Réseau, certains blinds ne
+sont pas plus DURS, ils sont **invisibles** (le marché caché, le « guanxi » — le
+joueur ne les voit même pas). L'absence de réseau rétrécit le champ des
+possibles, elle n'ajoute pas un malus de puissance.
+
+Note flavor cosmétique : un **score de conformité affiché sur une carte**
+(« Compliance : 98 % ») est autorisé comme PUR décor mimant le scoring ATS,
+jamais une ressource — un chiffre à côté de l'effet réel en Espoir.
+
 ### Malédictions
 **Le Template Non Rempli** — « Merci pour votre candidature chez
 `[#enseigne.nom#]` ». 0 dégât. Tu ne sauras jamais de qui. **La
@@ -147,7 +172,8 @@ carte-signature du jeu** — à mettre en avant dans la communication. ·
 « Cependant » (tampon rouge : annule les bonus du tour) · Nous avons retenu un
 autre profil (carte morte jusqu'à la fin de la run) · Manque d'expérience (ne
 fait rien, occupe une place) · Salaire selon profil (effet inconnu. Vraiment
-inconnu.) · Burn-out, Imposteur (+1 coût partout), Dette Technique.
+inconnu.) · Burn-out, Imposteur (+1 coût partout), Dette Technique · **Trop
+bougé** (job-hopping puni, tampon rouge).
 
 ### Reliques
 **Expérience du candidat** — tu reconnais un refus aux trois premiers mots ;
@@ -172,6 +198,13 @@ Casque antibruit (immunité aux réunions — Acte III, parqué).
 Le YOU DIED de Dark Souls est le vocabulaire, pas la blague : la solennité est
 MÉRITÉE (tu viens réellement de perdre quelque chose). Référence = étage bonus,
 jamais plancher.
+
+**Dispositif — le boss épique sur enjeu dérisoire** : présenter un blind avec
+tout l'apparat d'un boss (barre massive, nom en capitales, solennité, musique)
+pour un enjeu ridicule (« répondre à une offre de stagiaire »). L'emballage
+solennel sur le vide = la thèse visuelle (cousin de la musique corporate
+enjouée qui te détruit). Garder le dispositif, jamais une private joke
+nominative.
 
 ## 8. Le générateur par assemblage (V1)
 
@@ -209,6 +242,21 @@ fonction avec de l'humour : « Je savais » (reconnaître un refus avant le
 premier « mais »), « Lu en diagonale », « Culture Fit » (perdre après avoir
 tout réussi), « Premier ghosting », « Le candidat parfait n'existe pas ».
 
+Deux dispositifs collectionnables (à tester, cohérents avec « le déblocage =
+connaissance ») :
+- **Le portfolio de refus** : les cartes « Refus » collectées en jouant sont
+  inutiles en combat mais forment un récit. Réunir trois contradictions vécues
+  — « refus technique » + « surqualifié » + « pas assez d'expérience » —
+  débloque « Candidat paradoxal » (carte forte, coût 0, débloquable UNIQUEMENT
+  après avoir subi les trois). La banalité du refus devient mécanique : après N
+  runs on a reçu 30 refus sans se souvenir d'aucun — le refus est le fond
+  sonore, pas l'événement.
+- **Le Feedback comme récompense rare** : le jeu ne dit jamais POURQUOI on a
+  perdu (« Malheureusement », point). Une carte/relique « Feedback » se débloque
+  très tard (ex. 20 runs) et révèle enfin la vraie cause d'une défaite passée.
+  Le jeu reproduit l'ignorance du candidat ; lever cette ignorance EST la
+  récompense.
+
 ## 11. Le PNJ récurrent (V1)
 
 **Le Recruteur LinkedIn** (fonction Jorji Costava : la chaleur du jeu). Il te
@@ -216,6 +264,10 @@ contacte à chaque run. Il ne te reconnaît jamais. Le poste ne correspond
 jamais. Il est enthousiaste. 50 % : « C'était juste pour agrandir mon réseau. »
 À la run 10, tu es content de le voir. Un seul PNJ, intitulés générés, coût
 ridicule.
+
+Terrain concret : le **message privé**. Il t'aborde en DM, s'enthousiasme, « je
+ne retrouve plus la notif », disparaît. Le vent en message privé, le « c'était
+juste pour agrandir mon réseau ».
 
 ## 12. Références (le rôle exact de chacune)
 
@@ -254,6 +306,32 @@ textuels — trancher en jouant) · calibrage seuil/risque/casse (45 / hope÷130
 ×0.1 sont les valeurs v5, à re-tester avec l'ATS) · wording final de l'écran
 passif · design sonore · le nom public.
 
+**À tester en proto (peut enrichir, peut alourdir — pas des acquis)** :
+- **Le risque de conformité caché** : jouer certaines cartes ajoute un risque
+  invisible, affiché en tags corporate (« CONFORME » / « VIGILANCE INTERNE » /
+  « ALERTE CRITIQUE »), jamais en % (la règle d'information §4 sur une 2e
+  dimension). Trop pousser déclenche un audit qui remet l'Espoir à 0. Garde-fous
+  impératifs : (1) PAS une 3e ressource pilotée — une PROPRIÉTÉ de certaines
+  cartes (comme les double-tranchant), pas une jauge ; (2) déclencheurs
+  HONNÊTES, jamais des cartes de fraude (enjoliver, faux certif, piston) : ça
+  inverserait la thèse, le joueur deviendrait le fraudeur.
+- **Le temps comme ressource finie** (couche méta-run, PAS 3e ressource en
+  combat) : au fil des runs, une carte entre dans le deck sans qu'on la choisisse
+  (« vous avez pris de l'expérience / de l'âge », cousin de « Jeune équipe
+  dynamique »). Elle ne fait rien de visible, mais rend certains blinds « poste
+  pour junior » inaccessibles, forçant à pivoter (Management, Reconversion).
+  Meilleure formulation que le profil Senior statique (§9) : ici le temps est une
+  dérive subie, pas un choix de départ.
+
+**Garde-fous de vigilance (reconfirmés, ne rien changer)** : le joueur est la
+victime faillible d'un processus absurde, JAMAIS le tricheur — rejeter toute
+carte qui fait de lui le fraudeur (CV enjolivé, piston, effacer ses traces). ·
+Nommage : rejeter « KPI », « Hope Index », « Bande Passante » et tout jargon
+corporate/anglais — Espoir reste Espoir, Énergie reste Énergie (cible = tout le
+monde, pas les gens du corporate). · Plusieurs outils externes reconstruisent
+spontanément le système (compteur central, seuil, pastilles d'énergie, job
+board) : validation de solidité de l'architecture, pas une source de contenu.
+
 **Parqué (idées visuelles)** : skin « plateau de jeu » parodique (cadre doré
 façon Hearthstone rempli de contenu corporate) — gag à un coup qui casserait
 le déadpan en jeu de base ; envisageable uniquement comme easter egg ou
@@ -275,3 +353,27 @@ sans en garder l'habillage terminal (réservé aux développeurs — hors cible 
   mort « CANDIDATURE NON RETENUE » en chasse fixe (froid, automatique) contre
   la Georgia du Recruteur = caractérisation gratuite par la typo. Candidat à
   entrer dès la tâche 2 (l'écran de mort de l'ATS est déjà au programme).
+
+**Parqué (autre mode de jeu, hors slice — famille du duel async)** : l'entretien
+de groupe (群面) — 10 candidats simulés, 1 poste, élimination en direct. Jouer
+beaucoup = visible = désespéré (perd de l'Espoir) ; jouer trop peu = éliminé.
+Mini-jeu de bluff. C'est un MODE (compétition directe), pas un blind.
+
+## 15. Méthode de sourcing (pratique, pas une règle)
+
+- Reddit / LinkedIn = **sonar** (repérer quelle absurdité est universellement
+  reconnue), pas mine. Détecter le signal, puis revenir à la phrase réelle et
+  l'extraire. Ne jamais copier la parodie déjà faite ni le fil amer (test du
+  recruteur qui partage).
+- Rejeter tout ce qui est **pub déguisée en indignation** (ex. « BizWhoo » : une
+  boîte vend un outil en te faisant détester le RH). L'anti-modèle du ton.
+- Les sorties d'outils externes (Design / Stitch / Studio) sont du **matériau à
+  piller ponctuellement** (une palette, une dispo de main), jamais un écran
+  copié tel quel. GAME_DESIGN.md reste l'autorité.
+- **Regard externe (autre IA) sur brief OUVERT** : donner le concept nu + les
+  contraintes dures, JAMAIS nos solutions (sinon il prolonge nos rails et
+  renvoie notre reflet). S'il redécouvre nos idées → validation de solidité ;
+  s'il apporte du neuf → souvent via l'angle culturel (une absurdité d'un autre
+  marché qui rend visible une vérité universelle). Tout passe ensuite le même
+  filtre : extraction fidèle, tendresse, candidat faillible jamais tricheur, pas
+  de PV, pas de 3e ressource. À refaire avec d'autres modèles.

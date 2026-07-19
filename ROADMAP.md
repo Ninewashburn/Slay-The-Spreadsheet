@@ -94,6 +94,9 @@
 ## V3+ — Extensions
 - Duel asynchrone : ton deck contre le snapshot d'un autre profil, résolu par
   le moteur ; le gagnant désigné par « culture fit ».
+- Entretien de groupe (群面) : mode de bluff à plusieurs candidats simulés
+  (compétition directe), même famille que le duel async — un mode, pas un blind.
+  Spec dans GAME_DESIGN.md §14 (parqué).
 - Ascensions (modificateurs de règles sur moteur composable).
 - Actes II+ (ESN, négo TJM) — et seulement là : Cooptation (saute l'ATS,
   jamais la fin), L'Ancien de la Promo (saute l'Acte I entier).
