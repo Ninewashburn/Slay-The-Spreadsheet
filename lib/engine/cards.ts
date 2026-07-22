@@ -2,11 +2,67 @@ import type { CardDef, CardInstance, Rng } from './types';
 import { shuffle } from './rng';
 
 /**
- * La banque du slice. Règle d'extraction (CLAUDE.md) : chaque carte est la
- * traduction LITTÉRALE d'une phrase réellement reçue — la mécanique EST la
- * blague, jamais une vanne plaquée sur une règle.
+ * La banque du slice — 12 définitions distinctes. Règle d'extraction (CLAUDE.md
+ * §3) : chaque carte est la traduction LITTÉRALE d'une phrase réellement reçue,
+ * la mécanique EST la blague.
+ *
+ * Le mot-clé `Autonome` est la satire de l'ATS : la machine ne lit pas la
+ * sincérité (« l'entretien s'est très bien passé »), seulement les mots
+ * bourrés dans le dossier. Les cartes qui portent `Autonome` passent le filtre ;
+ * les cartes humaines, plus vraies, sont bloquées.
  */
 export const CARD_DEFS: Record<string, CardDef> = {
+  // --- Passent l'ATS (portent le mot exact) : le dossier optimisé machine ---
+  'candidature-envoyee': {
+    id: 'candidature-envoyee',
+    name: 'Candidature envoyée',
+    cost: 1,
+    effects: [{ kind: 'addHope', amount: 8 }],
+    flavor: 'Votre candidature a bien été transmise au service concerné.',
+    keywords: ['Autonome'],
+  },
+  'cv-optimise': {
+    id: 'cv-optimise',
+    name: 'CV optimisé mots-clés',
+    cost: 1,
+    effects: [{ kind: 'addHope', amount: 8 }],
+    flavor: 'Vous avez recopié l’offre dans votre CV. La machine reconnaît les siens.',
+    keywords: ['Autonome'],
+  },
+  'profil-recherche': {
+    id: 'profil-recherche',
+    name: 'Profil activement recherché',
+    cost: 2,
+    effects: [{ kind: 'multiplyHope', factor: 2, baseIfZero: 16 }],
+    flavor: 'Un message automatique vous informe que votre profil correspond.',
+    keywords: ['Autonome'],
+  },
+  certification: {
+    id: 'certification',
+    name: 'Certification en ligne',
+    cost: 1,
+    effects: [{ kind: 'addHope', amount: 5 }],
+    flavor: 'Suivie en une après-midi. Ajoute une ligne. Coche une case.',
+    keywords: ['Autonome'],
+  },
+  portfolio: {
+    id: 'portfolio',
+    name: 'Portfolio en ligne',
+    cost: 2,
+    effects: [{ kind: 'multiplyHope', factor: 2, baseIfZero: 14 }],
+    flavor: 'Tout votre travail, rangé, présenté, accessible. Personne ne l’ouvrira.',
+    keywords: ['Autonome'],
+  },
+  'mot-cle-exact': {
+    id: 'mot-cle-exact',
+    name: 'Mot-clé Exact',
+    cost: 1,
+    effects: [{ kind: 'shieldNextBreak', reduction: 0.35 }],
+    flavor: 'Passe le filtre. Ne rapporte rien. Ne promet rien. Fonctionne.',
+    keywords: ['Autonome'],
+  },
+
+  // --- Bloquées par l'ATS (aucun mot-clé) : vos vraies qualités, illisibles ---
   'entretien-positif': {
     id: 'entretien-positif',
     name: "L'entretien s'est très bien passé",
@@ -21,20 +77,6 @@ export const CARD_DEFS: Record<string, CardDef> = {
     effects: [{ kind: 'multiplyHope', factor: 3, baseIfZero: 24 }],
     flavor: "L'annonce semble écrite pour vous. C'est précisément ce qui devrait vous inquiéter.",
   },
-  'candidature-envoyee': {
-    id: 'candidature-envoyee',
-    name: 'Candidature envoyée',
-    cost: 1,
-    effects: [{ kind: 'addHope', amount: 8 }],
-    flavor: 'Votre candidature a bien été transmise au service concerné.',
-  },
-  'mot-cle-exact': {
-    id: 'mot-cle-exact',
-    name: 'Mot-clé Exact',
-    cost: 1,
-    effects: [{ kind: 'shieldNextBreak', reduction: 0.35 }],
-    flavor: 'Passe le filtre. Ne rapporte rien. Ne promet rien. Fonctionne.',
-  },
   'relance-polie': {
     id: 'relance-polie',
     name: 'Relance polie',
@@ -42,15 +84,43 @@ export const CARD_DEFS: Record<string, CardDef> = {
     effects: [{ kind: 'reduceRiskThisTurn', factor: 0.6 }],
     flavor: 'Une relance courte et posée à J+10 est légitime.',
   },
+  'banniere-nebuleuse': {
+    id: 'banniere-nebuleuse',
+    name: 'Bannière « Ouvert aux opportunités »',
+    cost: 0,
+    effects: [{ kind: 'addHope', amount: 6 }],
+    flavor: 'Un cercle vert autour de votre photo. Vous vous sentez déjà mieux.',
+  },
+  mutuelle: {
+    id: 'mutuelle',
+    name: "Mutuelle d'entreprise",
+    cost: 1,
+    effects: [{ kind: 'addHope', amount: 5 }],
+    flavor: 'Présentée comme un avantage. Obligatoire pour tout employeur depuis 2016.',
+  },
+  babyfoot: {
+    id: 'babyfoot',
+    name: 'Babyfoot dans la salle de pause',
+    cost: 0,
+    effects: [{ kind: 'addHope', amount: 4 }],
+    flavor: 'La photo de couverture de l’annonce. Personne n’y joue jamais.',
+  },
 };
 
-/** Composition du deck de départ du profil Junior (12 cartes, doublons voulus). */
+/** Le deck de départ du profil Junior : une de chaque, 12 cartes distinctes. */
 export const DECKLIST: ReadonlyArray<readonly [string, number]> = [
-  ['entretien-positif', 3],
-  ['poste-correspond', 2],
-  ['candidature-envoyee', 2],
-  ['mot-cle-exact', 3],
-  ['relance-polie', 2],
+  ['candidature-envoyee', 1],
+  ['cv-optimise', 1],
+  ['profil-recherche', 1],
+  ['certification', 1],
+  ['portfolio', 1],
+  ['mot-cle-exact', 1],
+  ['entretien-positif', 1],
+  ['poste-correspond', 1],
+  ['relance-polie', 1],
+  ['banniere-nebuleuse', 1],
+  ['mutuelle', 1],
+  ['babyfoot', 1],
 ];
 
 /** Construit et mélange le deck. Chaque doublon reçoit son uid propre. */

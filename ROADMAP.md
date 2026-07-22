@@ -2,9 +2,10 @@
 
 > Règle : on n'implémente **que** la version courante. Les idées hors scope
 > vont dans `docs/GAME_DESIGN.md` (sections « parqué »), jamais dans le code.
-> État actuel : **V0.5 tâche 1 livrée** — l'UI de combat (parité proto v5) est
-> branchée sur `lib/engine` : store Zustand miroir, rolls via Rng seedé,
-> animations Framer Motion, 3 écrans de fin. Prochaine tâche : le blind ATS.
+> État actuel : **V0.5 vertical slice COMPLÈTE** — une run ATS → Ghosteur
+> jouable de l'accueil à la fin, moteur pur (22 tests), PWA installable.
+> Prochaine version : V1 (l'Acte I). Calibrage à retester en playtest (seuils,
+> décomposition), contenu des mots-clés à affiner (règle d'extraction).
 
 ---
 
@@ -36,30 +37,35 @@
       La peau reste 100 % logiciel RH (CLAUDE.md §6) ; le toucher vient
       des jeux de cartes, jamais leur décor.
 
-### 2. Blind ATS (`word-trigger`) — le boss tutoriel
-- [ ] Étendre `CardDef` : `keywords?: readonly string[]`.
-- [ ] L'offre affiche 1-2 mots-clés exigés ; toute carte sans le mot est
-      **bloquée** (grisée, injouable), pas affaiblie. « Angular » ≠ « AngularJS ».
-- [ ] Écran de mort : « CANDIDATURE NON RETENUE » — froid, automatique, machine.
-- [ ] Tests : carte bloquée ≠ jouable ; le mot exact débloque.
+### 2. Blind ATS (`word-trigger`) — le boss tutoriel — ✅ livrée
+- [x] Étendre `CardDef` : `keywords?: readonly string[]`.
+- [x] L'offre affiche le mot-clé exigé ; toute carte sans le mot est
+      **bloquée** (grisée, cadenas, injouable), pas affaiblie. Match EXACT
+      (« Angular » ≠ « AngularJS »). Garde `isBlocked`/`canPlay` dans le reducer.
+- [x] Écran de mort : « CANDIDATURE NON RETENUE » en **monospace** (la voix
+      froide de la machine, contre la Georgia du refus humain).
+- [x] Tests : carte bloquée = injouable (état inchangé) ; le mot exact débloque ;
+      « AngularJS » ne satisfait pas « Angular » ; hors word-trigger, rien n'est bloqué.
 
-### 3. Blind Ghosteur (`silent-decay`)
-- [ ] Pas de seuil à atteindre. N'attaque jamais. L'Espoir se décompose chaque
-      tour, d'autant plus vite qu'il est haut (le combat dure aussi longtemps
-      que ton Espoir — The Sorrow).
-- [ ] Nouvelle action `LEAVE` (« Partir ») : la seule victoire. Partir tôt =
-      garder son Espoir pour la suite.
-- [ ] Écran de mort : **aucun**. Retour au menu, silence. (Le contraste avec
-      l'ATS qui parle est toute la caractérisation — ne mettre AUCUN texte.)
-- [ ] Tests : la décomposition scale avec l'Espoir ; LEAVE conserve l'état.
+### 3. Blind Ghosteur (`silent-decay`) — ✅ livrée
+- [x] Pas de seuil. N'attaque jamais (`computeRisk` = 0). L'Espoir se décompose
+      chaque tour via `computeDecay`, d'autant plus vite qu'il est haut (The Sorrow).
+- [x] Action `LEAVE` (« Partir ») : la seule victoire, conserve l'Espoir.
+      Bouton corail proéminent qui pulse.
+- [x] Écran de mort : **aucun**. Fondu au noir silencieux, retour à l'accueil,
+      zéro texte. Le contraste avec l'ATS qui parle est la caractérisation.
+- [x] Tests : la décomposition scale avec l'Espoir ; LEAVE conserve l'état ;
+      le silence ne casse jamais ; décomposition jusqu'au bout = fin sans ligne de mort.
 
-### 4. La run
-- [ ] Enchaînement ATS → Ghosteur (l'écran de victoire d'un blind mène au
-      suivant : « Continuer », pas « rejouer »).
-- [ ] 12 cartes du slice (les 5 défs actuelles + à compléter depuis
-      GAME_DESIGN.md §Cartes, catégorie slice).
-- [ ] Écran d'accueil sobre (logo texte, Jouer) — on est dans un outil, pas un jeu.
-- [ ] PWA installable (manifest + icônes), test réel sur téléphone.
+### 4. La run — ✅ livrée
+- [x] Enchaînement ATS → Ghosteur : victoire du 1er blind → « Continuer »
+      (jamais « rejouer »). L'Espoir gagné est **reporté** sur le suivant
+      (`startingHope`) : on arrive plein d'espoir chez le Ghosteur, et il fond.
+- [x] 12 cartes distinctes (`lib/engine/cards.ts`) : 6 passent l'ATS (portent
+      « Autonome »), 6 sont bloquées (les vraies qualités, illisibles par la machine).
+- [x] Écran d'accueil sobre (`HomeScreen`, logo texte, « Postuler »).
+- [x] PWA installable (`app/manifest.ts` + `public/icon.svg` + theme-color),
+      app 100 % cliente (toutes routes statiques → prête pour Capacitor V2).
 
 ---
 

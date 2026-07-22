@@ -25,6 +25,11 @@ export interface CardDef {
   readonly effects: readonly Effect[];
   /** La phrase réelle dont la carte est la traduction littérale. Jamais une vanne ajoutée. */
   readonly flavor?: string;
+  /**
+   * Les mots-clés que la carte porte. Seul un blind `word-trigger` (l'ATS) les
+   * lit : il bloque toute carte qui ne porte pas SON mot exact. Ailleurs, ignorés.
+   */
+  readonly keywords?: readonly string[];
 }
 
 /** Instance d'une carte dans le deck (les doublons ont chacun leur uid). */
@@ -43,7 +48,7 @@ export interface Blind {
   readonly id: string;
   readonly name: string;
   readonly kind: BlindKind;
-  /** L'Espoir FINAL exigé pour gagner. La moitié « score » de la thèse. */
+  /** L'Espoir FINAL exigé pour gagner. La moitié « score » de la thèse. 0 pour le Ghosteur (pas de seuil). */
   readonly seuil: number;
   readonly maxTurns: number;
   /** Ligne de mort quand l'Espoir est brisé deux fois. */
@@ -51,8 +56,19 @@ export interface Blind {
   /** Ligne de mort quand la run se termine sous le seuil. */
   readonly deathLineBelowSeuil: string;
   readonly victoryLine: string;
+  /**
+   * Le mot exact exigé par l'offre (blinds `word-trigger` uniquement). Toute
+   * carte qui ne le porte pas est BLOQUÉE, pas affaiblie. « Angular » ≠ « AngularJS ».
+   */
+  readonly requiredKeyword?: string;
   /** Fonction PURE : même état → même risque. Le brouillard est pour le joueur, pas pour les tests. */
   computeRisk(state: GameState): number;
+  /**
+   * Blinds `silent-decay` (le Ghosteur) uniquement : l'Espoir qui reste après
+   * une tour de décomposition. Déterministe, sans roll — il ne « tape » pas,
+   * il attend. Plus l'Espoir est haut, plus il fond vite (The Sorrow).
+   */
+  computeDecay?(state: GameState): number;
 }
 
 // --- État ---
@@ -86,4 +102,6 @@ export interface GameState {
 export type Action =
   | { readonly type: 'PLAY_CARD'; readonly uid: string }
   | { readonly type: 'PASS_TURN'; readonly roll: number }
-  | { readonly type: 'END_TURN'; readonly roll: number };
+  | { readonly type: 'END_TURN'; readonly roll: number }
+  // Partir : la seule victoire contre le Ghosteur. On garde l'Espoir qu'on a.
+  | { readonly type: 'LEAVE' };

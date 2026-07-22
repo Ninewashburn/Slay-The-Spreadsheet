@@ -7,30 +7,36 @@ import { CardGlyph } from './art';
 interface Props {
   readonly def: CardDef;
   readonly preview: CardPreview;
+  /** Grisée par le manque d'Énergie ou par l'ATS. */
   readonly disabled: boolean;
+  /** Bloquée par l'ATS : injouable par nature (mot exact absent), pas juste en attente d'Énergie. */
+  readonly blocked: boolean;
+  /** Le mot que l'ATS exige, affiché sur la carte bloquée. */
+  readonly requiredKeyword?: string;
   readonly onPlay: () => void;
-  /** true si le point (x, y) est au-dessus de la zone de jeu (le compteur). */
   readonly isPointInDropZone: (x: number, y: number) => boolean;
   readonly onDragChange: (dragging: boolean) => void;
 }
 
 /**
- * Une carte-objet : elle se soulève au survol, s'incline quand on la
- * saisit, se GLISSE sur le compteur pour être jouée (le toucher
- * Hearthstone, dans la peau d'un logiciel RH). Le clic reste possible.
- * L'aperçu est la règle d'information : « 16 → 32 », pastille verte
- * pleine quand jouer cette carte franchit le seuil.
+ * Une carte-objet : elle se soulève au survol, s'incline quand on la saisit, se
+ * GLISSE sur le compteur pour être jouée. Le clic reste possible. L'aperçu est la
+ * règle d'information : « 16 → 32 », pastille verte pleine au franchissement du
+ * seuil. Bloquée par l'ATS, elle est grisée, barrée d'un cadenas, et dit le mot
+ * qui lui manque — pas affaiblie, injouable.
  */
 export default function HandCard({
   def,
   preview,
   disabled,
+  blocked,
+  requiredKeyword,
   onPlay,
   isPointInDropZone,
   onDragChange,
 }: Props) {
-  // Un drag qui retombe déclenche aussi un click natif : on l'avale.
   const justDragged = useRef(false);
+  const draggable = !disabled && !blocked;
 
   const pill = preview.goal
     ? 'bg-[var(--green)] text-white'
@@ -41,7 +47,7 @@ export default function HandCard({
   return (
     <motion.button
       layout
-      drag={!disabled}
+      drag={draggable}
       dragSnapToOrigin
       dragElastic={0.9}
       onDragStart={() => {
@@ -56,13 +62,11 @@ export default function HandCard({
         if (isPointInDropZone(info.point.x, info.point.y)) onPlay();
       }}
       onClick={() => {
-        if (!justDragged.current && !disabled) onPlay();
+        if (!justDragged.current && draggable) onPlay();
       }}
       initial={{ opacity: 0, y: 18 }}
-      animate={{ opacity: disabled ? 0.35 : 1, y: 0 }}
-      whileHover={
-        disabled ? undefined : { y: -6, boxShadow: '0 14px 30px rgba(61,107,224,0.18)' }
-      }
+      animate={{ opacity: blocked ? 0.5 : disabled ? 0.35 : 1, y: 0 }}
+      whileHover={draggable ? { y: -6, boxShadow: '0 14px 30px rgba(61,107,224,0.18)' } : undefined}
       whileDrag={{
         scale: 1.07,
         rotate: -3,
@@ -71,8 +75,10 @@ export default function HandCard({
         cursor: 'grabbing',
       }}
       transition={{ duration: 0.2, ease: 'easeOut' }}
-      disabled={disabled}
-      className="relative flex min-h-[168px] cursor-grab touch-none flex-col rounded-[var(--radius)] border border-[var(--line)] bg-[var(--panel)] p-3 text-left shadow-[0_2px_6px_rgba(20,30,60,0.06)] disabled:cursor-default lg:min-h-[200px] lg:p-4"
+      disabled={disabled || blocked}
+      className={`relative flex min-h-[168px] flex-col rounded-[var(--radius)] border bg-[var(--panel)] p-3 text-left shadow-[0_2px_6px_rgba(20,30,60,0.06)] disabled:cursor-default lg:min-h-[200px] lg:p-4 ${
+        blocked ? 'border-dashed border-[var(--line)] grayscale' : 'border-[var(--line)]'
+      } ${draggable ? 'cursor-grab touch-none' : ''}`}
     >
       <div className="mb-2 flex items-start justify-between gap-2">
         <CardGlyph defId={def.id} />
@@ -93,12 +99,18 @@ export default function HandCard({
 
       <div className="flex-1" />
 
-      {preview.text !== '' && (
-        <div
-          className={`mt-2 self-start rounded-full px-2 py-[3px] text-[11px] font-bold tabular-nums lg:px-2.5 lg:text-[12.5px] ${pill}`}
-        >
-          {preview.text}
+      {blocked ? (
+        <div className="mt-2 self-start rounded-full bg-[var(--bg)] px-2 py-[3px] text-[10.5px] font-bold text-[var(--muted)]">
+          🔒 exige « {requiredKeyword} »
         </div>
+      ) : (
+        preview.text !== '' && (
+          <div
+            className={`mt-2 self-start rounded-full px-2 py-[3px] text-[11px] font-bold tabular-nums lg:px-2.5 lg:text-[12.5px] ${pill}`}
+          >
+            {preview.text}
+          </div>
+        )
       )}
     </motion.button>
   );

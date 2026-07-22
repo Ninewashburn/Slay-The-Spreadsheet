@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import type { GameState } from '../types';
+import type { Blind, CardDef, GameState } from '../types';
 import { mulberry32 } from '../rng';
-import { buildDeck } from '../cards';
-import { recruteur } from '../blinds';
-import { applyAction, createInitialState, HAND_SIZE } from '../reducer';
+import { buildDeck, CARD_DEFS } from '../cards';
+import { ats, ghosteur, recruteur } from '../blinds';
+import { applyAction, canPlay, createInitialState, HAND_SIZE, isBlocked } from '../reducer';
 
 /** Une partie fraîche, déterministe. */
 function freshGame(seed = 42) {
@@ -135,6 +135,98 @@ describe('la pioche (v4)', () => {
       const conserved = state.drawPile.length + state.hand.length + state.discardPile.length;
       expect(conserved).toBe(12); // la défausse se remélange, rien ne se perd
     }
+  });
+});
+
+describe("l'ATS — word-trigger : bloque, n'affaiblit pas (V0.5)", () => {
+  const handOf = (state: GameState, defId: string): GameState => ({
+    ...state,
+    hand: [{ uid: 'x', defId }],
+    energy: 3,
+  });
+
+  it('une carte sans le mot exact est BLOQUÉE : injouable, état inchangé', () => {
+    const { state } = freshGame();
+    const rng = mulberry32(20);
+    // entretien-positif ne porte aucun mot-clé : l'ATS ne le lit pas.
+    const s = handOf(state, 'entretien-positif');
+    expect(isBlocked(CARD_DEFS['entretien-positif']!, ats)).toBe(true);
+    const after = applyAction(s, { type: 'PLAY_CARD', uid: 'x' }, ats, rng);
+    expect(after).toBe(s); // strictement rien : la carte est grisée, pas jouée
+  });
+
+  it('le mot exact débloque la carte : elle se joue normalement', () => {
+    const { state } = freshGame();
+    const rng = mulberry32(21);
+    // candidature-envoyee porte « Autonome », le mot exigé par l'ATS.
+    const s = handOf(state, 'candidature-envoyee');
+    expect(canPlay(s, CARD_DEFS['candidature-envoyee']!, ats)).toBe(true);
+    const after = applyAction(s, { type: 'PLAY_CARD', uid: 'x' }, ats, rng);
+    expect(after.hope).toBe(8);
+    expect(after.hand).toHaveLength(0);
+  });
+
+  it('le match est EXACT : « AngularJS » ne satisfait pas « Angular »', () => {
+    const wordBlind: Blind = { ...ats, requiredKeyword: 'Angular' };
+    const almost: CardDef = { id: 'a', name: 'a', cost: 1, effects: [], keywords: ['AngularJS'] };
+    const exact: CardDef = { id: 'b', name: 'b', cost: 1, effects: [], keywords: ['Angular'] };
+    expect(isBlocked(almost, wordBlind)).toBe(true);
+    expect(isBlocked(exact, wordBlind)).toBe(false);
+  });
+
+  it('hors word-trigger, aucun blocage : le Recruteur lit toutes les cartes', () => {
+    expect(isBlocked(CARD_DEFS['entretien-positif']!, recruteur)).toBe(false);
+  });
+});
+
+describe('le Ghosteur — silent-decay : il attend, il ne tape pas (V0.5)', () => {
+  it("l'Espoir se décompose d'autant plus vite qu'il est haut", () => {
+    const fracLost = (hope: number): number => (hope - ghosteur.computeDecay!({ hope } as GameState)) / hope;
+    expect(fracLost(100)).toBeGreaterThan(fracLost(20));
+  });
+
+  it('END_TURN décompose sans jamais casser (breaksCount reste à 0)', () => {
+    const { state } = freshGame();
+    const rng = mulberry32(30);
+    const s = withOverrides(state, { hope: 40, hopeGeneratedTotal: 40 });
+    const after = applyAction(s, { type: 'END_TURN', roll: 0.0 }, ghosteur, rng);
+    expect(after.hope).toBeLessThan(40);
+    expect(after.breaksCount).toBe(0); // le silence ne « tape » pas
+  });
+
+  it("Partir (LEAVE) est la seule victoire : l'Espoir est conservé", () => {
+    const { state } = freshGame();
+    const rng = mulberry32(31);
+    const s = withOverrides(state, { hope: 33, hopeGeneratedTotal: 33 });
+    const left = applyAction(s, { type: 'LEAVE' }, ghosteur, rng);
+    expect(left.status).toBe('won');
+    expect(left.hope).toBe(33); // partir tôt = garder son Espoir
+  });
+
+  it('LEAVE ne fait rien contre un blind qui se joue (Recruteur)', () => {
+    const { state } = freshGame();
+    const rng = mulberry32(32);
+    expect(applyAction(state, { type: 'LEAVE' }, recruteur, rng)).toBe(state);
+  });
+
+  it("laisser l'Espoir se décomposer jusqu'au bout finit la run, sans ligne de mort", () => {
+    let { state } = freshGame();
+    const rng = mulberry32(33);
+    state = withOverrides(state, { hope: 12, hopeGeneratedTotal: 12 });
+    for (let i = 0; i < 12 && state.status === 'playing'; i++) {
+      state = applyAction(state, { type: 'END_TURN', roll: 0.9 }, ghosteur, rng);
+    }
+    expect(state.status).toBe('lost');
+    expect(state.lostReason).toBeNull(); // aucune ligne de mort : retour au menu, silence
+  });
+});
+
+describe('la run — report de l\'Espoir entre blinds (V0.5)', () => {
+  it("on arrive chez le Ghosteur avec l'Espoir gagné à l'ATS (pas de passivité)", () => {
+    const rng = mulberry32(40);
+    const s = createInitialState(buildDeck(rng), rng, { startingHope: 26 });
+    expect(s.hope).toBe(26);
+    expect(s.hopeGeneratedTotal).toBe(26); // compté comme engagement réel
   });
 });
 

@@ -62,6 +62,15 @@ Un blind = règle + seuil. Pas de PV. Sa seule prise de parole : sa ligne de mor
 Le contraste des deux écrans (l'un parle, l'autre se tait) est toute la
 caractérisation — le silence n'est lisible que parce que l'autre parle.
 
+**Implémenté (V0.5, valeurs à retester en playtest)** : l'ATS exige le mot
+`Autonome` (red flag canon) ; 6 des 12 cartes le portent (le dossier optimisé
+machine), 6 ne le portent pas (les vraies qualités, illisibles par le filtre) ;
+seuil 24 en 4 tours, ne casse jamais. Le Ghosteur décompose l'Espoir de
+`min(0.7, 0.2 + hope/150)` par tour (plus tu y crois, plus vite ça s'efface),
+8 tours max, l'Espoir gagné à l'ATS est reporté. Le choix du mot et des cartes
+qui le portent relève de la règle d'extraction (§3) : à affiner avec de vraies
+offres, la structure moteur (isBlocked / requiredKeyword) ne bouge pas.
+
 ### Acte I (V1)
 | Blind | Règle | Ligne de mort |
 |---|---|---|

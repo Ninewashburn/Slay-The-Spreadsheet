@@ -150,6 +150,64 @@ export function CardGlyph({ defId }: { readonly defId: string }) {
           <path d="M4.5 17 L9.5 23 L12.5 16.5 Z" fill="var(--green)" />
         </Glyph>
       );
+    case 'cv-optimise':
+      // le document : des lignes recopiées de l'offre
+      return (
+        <Glyph bg="var(--blue-soft)">
+          <rect x="9" y="6" width="14" height="20" rx="2" fill="#FFFFFF" stroke="var(--blue)" strokeWidth="1.6" />
+          <rect x="12" y="10" width="8" height="1.8" rx="0.9" fill="var(--blue)" />
+          <rect x="12" y="14" width="8" height="1.8" rx="0.9" fill="var(--blue)" />
+          <rect x="12" y="18" width="5" height="1.8" rx="0.9" fill="var(--blue)" />
+        </Glyph>
+      );
+    case 'profil-recherche':
+      // la loupe sur le profil : « votre profil correspond »
+      return (
+        <Glyph bg="var(--blue-soft)">
+          <circle cx="14" cy="14" r="6.5" fill="none" stroke="var(--blue)" strokeWidth="2.4" />
+          <path d="M19 19 L25 25" stroke="var(--blue)" strokeWidth="2.6" strokeLinecap="round" />
+        </Glyph>
+      );
+    case 'certification':
+      // la rosette : coche une case, ajoute une ligne
+      return (
+        <Glyph bg="var(--blue-soft)">
+          <circle cx="16" cy="13" r="7" fill="none" stroke="var(--blue)" strokeWidth="2.2" />
+          <path d="M13 13.5 L15.2 15.8 L19.5 11" fill="none" stroke="var(--blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M13 19 L11.5 25 L16 22.5 L20.5 25 L19 19 Z" fill="var(--blue)" />
+        </Glyph>
+      );
+    case 'portfolio':
+      // le dossier : rangé, présenté, jamais ouvert
+      return (
+        <Glyph bg="var(--blue-soft)">
+          <path d="M6 10 Q6 8 8 8 L13 8 L15.5 10.5 L24 10.5 Q26 10.5 26 12.5 L26 22 Q26 24 24 24 L8 24 Q6 24 6 22 Z" fill="var(--blue)" />
+          <rect x="9" y="13" width="14" height="8.5" rx="1.5" fill="#FFFFFF" opacity="0.85" />
+        </Glyph>
+      );
+    case 'banniere-nebuleuse':
+      // l'anneau vert « ouvert aux opportunités »
+      return (
+        <Glyph bg="var(--green-soft)">
+          <circle cx="16" cy="16" r="9" fill="none" stroke="var(--green)" strokeWidth="2.6" />
+          <circle cx="16" cy="16" r="4.5" fill="var(--green)" opacity="0.35" />
+        </Glyph>
+      );
+    case 'mutuelle':
+      // la croix : présentée comme un avantage, obligatoire par la loi
+      return (
+        <Glyph bg="var(--green-soft)">
+          <path d="M13 7 L19 7 L19 13 L25 13 L25 19 L19 19 L19 25 L13 25 L13 19 L7 19 L7 13 L13 13 Z" fill="var(--green)" />
+        </Glyph>
+      );
+    case 'babyfoot':
+      // le ballon : la photo de couverture, personne n'y joue
+      return (
+        <Glyph bg="var(--green-soft)">
+          <circle cx="16" cy="16" r="8.5" fill="#FFFFFF" stroke="var(--green)" strokeWidth="1.8" />
+          <path d="M16 10.5 L19.5 13 L18 17 L14 17 L12.5 13 Z" fill="var(--green)" />
+        </Glyph>
+      );
     default:
       return (
         <Glyph bg="var(--bg)">

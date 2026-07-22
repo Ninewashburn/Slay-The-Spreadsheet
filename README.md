@@ -4,19 +4,26 @@ Deckbuilding roguelike satirique sur la recherche d'emploi. Le deck = ton
 profil. Les blinds = les étapes d'un process. L'**Espoir** est ton score — et
 la seule chose par laquelle le jeu peut te blesser.
 
-> **Commencer par lire `CLAUDE.md`** (les non-négociables), puis `ROADMAP.md`
-> (la version courante : V0.5, le vertical slice). La conception complète est
-> dans `docs/GAME_DESIGN.md`.
+> **Commencer par lire `CLAUDE.md`** (les non-négociables), puis `ROADMAP.md`.
+> Le **vertical slice V0.5 est complet** : une run jouable de l'accueil à la fin
+> (ATS → Ghosteur). La conception complète est dans `docs/GAME_DESIGN.md`.
 
 ## Démarrage
 
 ```bash
 npm install
-npm test        # le moteur : 12 tests, dont les 3 bugs de playtest en non-régression
-npm run dev     # http://localhost:3000 — l'écran de combat (parité proto v5)
+npm test        # le moteur : 22 tests, dont les 3 bugs de playtest en non-régression
+npm run dev     # http://localhost:3000 — la run complète : « Postuler » → ATS → Ghosteur
 ```
 
 Sur Windows, `start.bat` fait tout (install au premier lancement, serveur, navigateur).
+
+## La run (V0.5)
+
+Deux blinds, deux façons de perdre, deux voix. **L'ATS** (un robot) filtre : toute
+carte qui ne porte pas son mot exact est grisée, injouable. Écran froid, monospace.
+**Le Ghosteur** (un humain) ne répond jamais : ton Espoir se décompose seul, et la
+seule victoire est de **Partir**. Aucun écran de mort, juste le silence.
 
 ## Structure
 
@@ -30,16 +37,16 @@ lib/engine/             # le moteur : TypeScript pur, zéro React, RNG injecté
   types.ts              #   le contrat (Effect en data, Blind = règle + seuil)
   reducer.ts            #   LE point de décision unique (applyAction)
   effects.ts            #   le résolveur unique des effets
-  cards.ts              #   les cartes du slice, en data
-  blinds.ts             #   Recruteur (référence) + contrats ATS/Ghosteur
+  cards.ts              #   les 12 cartes du slice, en data (avec keywords ATS)
+  blinds.ts             #   Recruteur (réf.) + ATS + Ghosteur + SLICE_RUN
   rng.ts                #   mulberry32 + shuffle — même seed, même run
   __tests__/            #   vitest — chaque règle arrive avec son test
-lib/ui/                 # côté client : store Zustand (miroir de GameState, rolls
-                        #   via Rng seedé) + aperçus de cartes (via le vrai résolveur)
-components/combat/      # la scène : fenêtre RH, blind incarné, offre-document,
-                        #   cartes-objets (drag & drop), fil d'activité, écrans de fin
-                        #   (art Corporate Memphis en SVG inline : art.tsx)
-app/                    # Next 15 (App Router) — la page d'accueil EST le combat
+lib/ui/                 # côté client : store Zustand (miroir + orchestration de
+                        #   la run) + aperçus de cartes (via le vrai résolveur)
+components/combat/      # la scène : accueil, fenêtre RH, blind incarné,
+                        #   offre-document, cartes-objets (drag & drop, blocage ATS),
+                        #   fil d'activité, écrans de fin (art SVG : art.tsx)
+app/                    # Next 15 : la run (page), manifest PWA, icône
 ```
 
 ## Le principe qui gouverne tout
