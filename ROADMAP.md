@@ -75,7 +75,8 @@
 - Générateur d'offres et de refus **par assemblage** (formule d'ouverture +
   mot pivot + clôture) — contenu infini, zéro écriture à la pièce.
 - Blinds : Prétentions Salariales (passer = coup optimal), Le Poste Fictif,
-  Le Manager qui a Pris un Senior (l'unique défaite scriptée du jeu).
+  L'Offre Mouton à Cinq Pattes (escalade d'exigences, se gagne en nommant ses
+  lacunes), Le Manager qui a Pris un Senior (l'unique défaite scriptée du jeu).
 - Le système des mots comme intents visibles (12 mots, échelle de gravité).
 - Relique « Expérience du candidat » : le mail de refus intégral est imblocable
   UNE fois (run 1), puis la relique le saute à jamais. C'est la méta-progression.

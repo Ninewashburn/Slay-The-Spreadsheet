@@ -77,7 +77,91 @@ offres, la structure moteur (isBlocked / requiredKeyword) ne bouge pas.
 | **Recruteur** (référence proto) | Risque croissant avec l'Espoir, seuil 45 en 5 tours | « NOUS AVONS RETENU UN AUTRE PROFIL » / « NOUS AVONS REÇU DE TRÈS NOMBREUSES CANDIDATURES » |
 | **Prétentions Salariales** | Chaque carte jouée = un chiffre annoncé. Passer est le coup optimal. Règle cachée : ne jamais parler en premier. | — |
 | **Le Poste Fictif** | L'offre n'a jamais été ouverte. Pas de résolution possible. | (information neutre, ticket fermé) |
+| **L'Offre Mouton à Cinq Pattes** | Escalade : chaque tour révèle une exigence de plus, tirée au hasard, sans limite. Impossible à couvrir par construction. Se gagne en NOMMANT ses lacunes (Transparence assumée), pas en cochant les cases. Récompense affichée fluctuante (La Fourchette Schrödinger). Fiche détaillée ci-dessous. | « Votre profil est intéressant mais nous cherchons quelqu'un de plus polyvalent. » |
 | **Le Manager qui a Pris un Senior** | Tout réussi, défaite scriptée. **L'UNIQUE boss sans sortie du jeu** — sa ligne est la plus humaine : | « NOUS AVONS RETENU UN AUTRE PROFIL » (politesse comparative : on ne te dit pas que tu étais mauvais, on te dit qu'il y avait mieux) |
+
+#### Fiche — L'Offre Mouton à Cinq Pattes
+
+**Placement** : étape intermédiaire, AVANT le boss RH et le Négociateur TJM.
+Placé tôt, il sert de révélation à la mécanique de méta-progression.
+
+**Le nom** : « mouton à cinq pattes » est l'expression que les recruteurs
+emploient eux-mêmes pour désigner le profil impossible qu'ils cherchent.
+Extraction fidèle, comprise par tout le monde. (« Offre Chimère » écarté :
+sonne inventé.)
+
+**Pattern source (réel)** : une annonce unique empile en un seul poste une
+douzaine d'exigences hétérogènes, réclame une « très forte expertise » sur des
+domaines émergents, et affiche une fourchette du simple au double — signe que
+personne n'a réfléchi au profil cherché. Détail le plus fort du matériau :
+la fourchette annoncée au centime près (« 32 065,43 € à 62 356,03 € ») sur une
+plage du simple au double. La fausse rigueur comptable posée sur une donnée
+totalement floue. Personne n'a besoin de connaître le métier pour rire.
+
+**⚠ Désjargonnage obligatoire (CLAUDE.md §3, cible = tout le monde)** : le
+matériau source est une annonce de développeur. Le DISPOSITIF est universel, le
+vocabulaire ne l'est pas. Interdiction d'utiliser les termes techniques du
+source (Docker, microservices, RAG, prompt engineering, .NET, NoSQL…) : ce
+serait le contenu le plus « dev » du jeu, contre la règle explicite (« Docker
+n'est pas une carte, "Malheureusement" oui »). Pool d'exigences par défaut,
+lisible par n'importe qui : polyvalent · autonome · souriant · disponible le
+week-end · 3 ans d'expérience · permis B · anglais courant · bon relationnel ·
+capacité à gérer le stress · esprit d'équipe · force de proposition · mobile
+nationalement · maîtrise du Pack Office · sens du service client. Même
+absurdité, même escalade, zéro barrière d'entrée. Une variante « tech » serait
+un pool ALTERNATIF de la même mécanique, jamais le pool par défaut.
+
+**Gimmick — La Liste Infinie** : à chaque tour, le blind révèle une nouvelle
+exigence tirée au hasard. Le joueur doit posséder une carte correspondante pour
+ne pas subir de dégâts. La liste étant générée sans limite, il est
+mathématiquement impossible de tout couvrir. Le jeu doit le faire RESSENTIR,
+jamais l'expliquer.
+
+**Condition de victoire (le twist)** : le blind ne se bat pas en cochant les
+cases. Il se bat avec **Transparence assumée** (carte déjà en banque : révéler
+soi-même une faiblesse neutralise l'attaque). Ici, nommer explicitement ce
+qu'on ne maîtrise pas neutralise la Liste Infinie pour le reste du combat.
+Bluffer sur toutes les exigences → défaite. Assumer un sous-ensemble réel et
+nommer ses lacunes → victoire.
+
+**⚠ Risque de conception, à trancher en playtest** : si une seule carte
+débloque la victoire et qu'elle n'est pas piochée, le combat devient injouable
+et se lira comme arbitraire (le reproche exact évité depuis le proto v5). Deux
+parades à tester : (1) Transparence assumée garantie dans le deck face à ce
+blind ; (2) une seconde voie de victoire — jouer très peu de cartes (assumer un
+sous-ensemble par le silence plutôt que par la parole).
+
+**Effet secondaire — La Fourchette Schrödinger** : le montant de récompense
+affiché fluctue à chaque tour entre une valeur basse et une valeur haute, et
+n'est fixé qu'au moment de la victoire, par un tirage. Traduction mécanique
+exacte du gag source. Afficher les montants AU CENTIME PRÈS : la fausse
+précision EST la blague, ne jamais arrondir. (Variante parquée : un curseur
+« devinez la vraie fourchette » à placer soi-même, version interactive du même
+gag.)
+
+**Flavor (extraction, ne rien ajouter)** : titre « Nous recherchons un profil
+rare » · apparition « Maîtrise de quatre domaines exigée. Poste junior. » ·
+révélation d'exigence « Ah, et une très forte expertise en [X]. » · défaite du
+joueur « Votre profil est intéressant mais nous cherchons quelqu'un de plus
+polyvalent. » · victoire « Finalement on va prendre un alternant. »
+
+**Écarté** : le loot « le poste n'exigeait en réalité que 3 compétences sur
+25 ». Révélation inventée, non extraite. La ligne de victoire ci-dessus dit la
+même chose, en vrai et en plus drôle.
+
+**Anonymisation** : l'annonce source cite des entreprises et des produits réels.
+Aucun ne doit apparaître dans le jeu, un commit, une variable ou un asset
+(CLAUDE.md §2). Les exigences restent génériques.
+
+**Chevauchement à documenter** (sinon deux blinds redondants seront créés) : ce
+blind coexiste avec « Junior avec 5 ans d'expérience » (Actes II+). Les deux
+parodient l'annonce impossible, mais diffèrent.
+
+| | Junior avec 5 ans d'exp. | Mouton à Cinq Pattes |
+|---|---|---|
+| Nature | Contradiction **figée** (junior ET senior) | **Escalade** dans le temps |
+| Lecture | Visible d'emblée sur l'annonce | Se découvre tour après tour |
+| Victoire | (à définir) | Transparence assumée |
 
 ### Blinds vécus (V1.5) — extraits de 8 histoires réelles, 8 causes de mort distinctes, zéro méchant
 | Blind | Origine | Règle | Ligne de mort |
@@ -127,6 +211,12 @@ contré), Junior avec 5 ans d'expérience (conditions contradictoires par design
 Manager Pressé (« Je n'ai eu que cinq minutes » → ignore les cartes puissantes),
 La Cascade N1/N2/N3, Le Panel (trois interlocuteurs, un valide, un invalide, le
 troisième observait).
+
+**Note croisée — Junior avec 5 ans d'expérience** : ne pas le confondre avec
+L'Offre Mouton à Cinq Pattes (Acte I). Les deux parodient l'annonce impossible,
+mais celui-ci est une contradiction FIGÉE, visible d'emblée sur l'annonce ;
+l'autre est une ESCALADE qui se découvre tour après tour. Voir la table de
+comparaison dans la fiche du Mouton à Cinq Pattes.
 
 ### Événements d'ambiance (entre deux blinds, V1.5)
 Pas des blinds : des interruptions courtes pendant la recherche (concrétise la
@@ -280,6 +370,16 @@ connaissance ») :
   très tard (ex. 20 runs) et révèle enfin la vraie cause d'une défaite passée.
   Le jeu reproduit l'ignorance du candidat ; lever cette ignorance EST la
   récompense.
+
+**Banque de conseils candidats** (à n'utiliser QUE si la question ouverte
+« savoir seul vs conseils textuels » se tranche en faveur des textes ; sinon ces
+lignes restent en doc, jamais à l'écran). Déjà écrits pour respecter §8 (aucun
+tiret cadratin, phrases courtes), donc utilisables tels quels :
+- *Mouton à Cinq Pattes* : « Face à une annonce qui empile les exigences, ne
+  coche pas les cases par principe. Nomme précisément ce que tu maîtrises et ce
+  que tu ne maîtrises pas. Sur un poste flou, la lucidité te distingue plus
+  sûrement que l'exhaustivité. Elle te protège aussi d'un entretien qui
+  démonterait le bluff. »
 
 ## 11. Le PNJ récurrent (V1)
 
