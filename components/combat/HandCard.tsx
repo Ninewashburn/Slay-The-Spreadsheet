@@ -1,17 +1,14 @@
 import { motion } from 'framer-motion';
 import { useRef } from 'react';
-import type { CardDef } from '@/lib/engine';
+import type { CardCategory, CardDef } from '@/lib/engine';
 import type { CardPreview } from '@/lib/ui/preview';
 import { CardGlyph } from './art';
 
 interface Props {
   readonly def: CardDef;
   readonly preview: CardPreview;
-  /** Grisée par le manque d'Énergie ou par l'ATS. */
   readonly disabled: boolean;
-  /** Bloquée par l'ATS : injouable par nature (mot exact absent), pas juste en attente d'Énergie. */
   readonly blocked: boolean;
-  /** Le mot que l'ATS exige, affiché sur la carte bloquée. */
   readonly requiredKeyword?: string;
   readonly onPlay: () => void;
   readonly isPointInDropZone: (x: number, y: number) => boolean;
@@ -19,11 +16,21 @@ interface Props {
 }
 
 /**
+ * Lisibilité façon UNO (CLAUDE.md §6) : une TEINTE PAR TYPE, lisible d'un coup
+ * d'œil. Bleu = gonfle l'Espoir, vert = utilitaire, corail = piège. C'est la
+ * seule chose à voler aux jeux de cartes grand public : la lecture instantanée
+ * par la couleur, jamais le décor.
+ */
+const CATEGORY_STYLE: Record<CardCategory, { bar: string; pill: string }> = {
+  espoir: { bar: 'bg-[var(--blue)]', pill: 'bg-[var(--blue-soft)] text-[var(--blue)]' },
+  utilitaire: { bar: 'bg-[var(--green)]', pill: 'bg-[var(--green-soft)] text-[var(--green)]' },
+  piege: { bar: 'bg-[var(--corail)]', pill: 'bg-[#FFEDE5] text-[#C2410C]' },
+};
+
+/**
  * Une carte-objet : elle se soulève au survol, s'incline quand on la saisit, se
- * GLISSE sur le compteur pour être jouée. Le clic reste possible. L'aperçu est la
- * règle d'information : « 16 → 32 », pastille verte pleine au franchissement du
- * seuil. Bloquée par l'ATS, elle est grisée, barrée d'un cadenas, et dit le mot
- * qui lui manque — pas affaiblie, injouable.
+ * GLISSE sur le compteur pour être jouée. Le clic reste possible. Bloquée par
+ * l'ATS, elle est grisée, barrée d'un cadenas, et dit le mot qui lui manque.
  */
 export default function HandCard({
   def,
@@ -37,12 +44,8 @@ export default function HandCard({
 }: Props) {
   const justDragged = useRef(false);
   const draggable = !disabled && !blocked;
-
-  const pill = preview.goal
-    ? 'bg-[var(--green)] text-white'
-    : preview.tone === 'neutral'
-      ? 'bg-[var(--green-soft)] text-[var(--green)]'
-      : 'bg-[var(--blue-soft)] text-[var(--blue)]';
+  const style = CATEGORY_STYLE[def.category ?? 'espoir'];
+  const pill = preview.goal ? 'bg-[var(--green)] text-white' : style.pill;
 
   return (
     <motion.button
@@ -76,10 +79,13 @@ export default function HandCard({
       }}
       transition={{ duration: 0.2, ease: 'easeOut' }}
       disabled={disabled || blocked}
-      className={`relative flex min-h-[168px] flex-col rounded-[var(--radius)] border bg-[var(--panel)] p-3 text-left shadow-[0_2px_6px_rgba(20,30,60,0.06)] disabled:cursor-default lg:min-h-[200px] lg:p-4 ${
+      className={`relative flex min-h-[168px] flex-col overflow-hidden rounded-[var(--radius)] border bg-[var(--panel)] p-3 pt-3.5 text-left shadow-[0_2px_6px_rgba(20,30,60,0.06)] disabled:cursor-default lg:min-h-[200px] lg:p-4 lg:pt-4.5 ${
         blocked ? 'border-dashed border-[var(--line)] grayscale' : 'border-[var(--line)]'
       } ${draggable ? 'cursor-grab touch-none' : ''}`}
     >
+      {/* La barre de type : le code couleur, lisible avant même de lire le titre. */}
+      <span className={`absolute inset-x-0 top-0 h-1 ${style.bar}`} aria-hidden />
+
       <div className="mb-2 flex items-start justify-between gap-2">
         <CardGlyph defId={def.id} />
         <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#C9D8F7] bg-[var(--blue-soft)] text-[12px] font-bold text-[var(--blue)]">

@@ -71,7 +71,22 @@ seuil 24 en 4 tours, ne casse jamais. Le Ghosteur décompose l'Espoir de
 qui le portent relève de la règle d'extraction (§3) : à affiner avec de vraies
 offres, la structure moteur (isBlocked / requiredKeyword) ne bouge pas.
 
-### Acte I (V1)
+### Acte I (V1) — implémenté
+
+**Valeurs du code (à retester en playtest)** : Mouton seuil 40 en 6 tours,
+pénalité de 25 % d'Espoir par exigence non couverte, neutralisée par Transparence
+assumée (garantie ×2 dans le deck). Poupée Russe 3 couches, seuil 20 puis +18 par
+couche, récompense ×0,6 par couche, 8 tours qui ne se réinitialisent pas.
+Prétentions seuil 22 en 5 tours, risque = 0,26 par chiffre annoncé. Poste Fictif
+6 tours, l'Espoir tombe à 0 à la fermeture du ticket. Manager 5 tours, défaite
+inconditionnelle.
+
+⚠ **Lignes de mort proposées, PAS extraites** (à remplacer par de vraies phrases
+reçues) : Poste Fictif « L'offre a été retirée. », Poupée Russe « Votre dossier
+n'a pas été transmis à l'échelon suivant. », Prétentions « Vos prétentions sont
+au-dessus de notre fourchette. » et « Le poste a été pourvu pendant la
+négociation. ».
+
 | Blind | Règle | Ligne de mort |
 |---|---|---|
 | **Recruteur** (référence proto) | Risque croissant avec l'Espoir, seuil 45 en 5 tours | « NOUS AVONS RETENU UN AUTRE PROFIL » / « NOUS AVONS REÇU DE TRÈS NOMBREUSES CANDIDATURES » |

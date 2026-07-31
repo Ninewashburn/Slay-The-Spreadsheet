@@ -7,10 +7,11 @@ const GEORGIA = 'Georgia, "Times New Roman", serif';
 interface Props {
   readonly state: GameState;
   readonly blind: Blind;
-  readonly isLastBlind: boolean;
+  readonly isLastStep: boolean;
   readonly onContinue: () => void;
-  readonly onRestart: () => void;
   readonly onHome: () => void;
+  /** Une défaite mène au mail de refus : cet écran ne montre alors rien. */
+  readonly refusalPending: boolean;
 }
 
 const fadeUp = (delay: number, duration = 1.4) => ({
@@ -20,22 +21,20 @@ const fadeUp = (delay: number, duration = 1.4) => ({
 });
 
 /**
- * Toutes les sorties de combat. La typo caractérise le blind :
- * - ATS (word-trigger) : monospace, la voix froide de la machine.
- * - Recruteur (probabilistic) : Georgia, la solennité du refus humain.
- * - Ghosteur (silent-decay) perdu : AUCUN écran. Le silence. Retour au menu.
- * - Victoire de blind : « Continuer » vers le suivant. Dernier blind : run finie.
+ * Les sorties de combat. La typo caractérise le blind : monospace pour la
+ * machine (ATS), Georgia pour le refus humain. Le Ghosteur perdu ne produit
+ * AUCUN écran : le silence, puis le menu. Le contraste est la caractérisation.
  */
 export default function EndScreens({
   state,
   blind,
-  isLastBlind,
+  isLastStep,
   onContinue,
-  onRestart,
   onHome,
+  refusalPending,
 }: Props) {
-  // Le Ghosteur perdu ne parle pas : après un temps de silence, retour au menu.
   const silentLoss = state.status === 'lost' && blind.kind === 'silent-decay';
+
   useEffect(() => {
     if (!silentLoss) return;
     const t = setTimeout(onHome, 3200);
@@ -44,49 +43,7 @@ export default function EndScreens({
 
   if (state.status === 'playing') return null;
 
-  // --- Victoire ---
-  if (state.status === 'won') {
-    // Le Ghosteur : on est PARTI (dernier blind). Sobre, pas triomphal.
-    if (isLastBlind) {
-      return (
-        <Overlay bg="#0B1710" btn={{ label: 'recommencer', cls: 'border-[#2D4A3C] text-[#7FA893]', onClick: onRestart }}>
-          <motion.h1
-            {...fadeUp(1.3)}
-            className="m-0 mb-3 max-w-[380px] px-5 text-center text-[24px] font-bold leading-[1.4] text-[#6EE7B7]"
-            style={{ fontFamily: GEORGIA }}
-          >
-            Vous êtes parti.
-          </motion.h1>
-          <motion.p
-            {...fadeUp(1.8)}
-            className="m-0 mb-7 max-w-[300px] text-center text-[13px] leading-[1.6] text-[#5F8272]"
-          >
-            Vous avez gardé {Math.round(state.hope)} d&apos;Espoir. Pour la prochaine fois.
-          </motion.p>
-        </Overlay>
-      );
-    }
-    // Blind intermédiaire réussi : on continue le process.
-    return (
-      <Overlay bg="#0B1220" btn={{ label: 'Continuer', cls: 'border-[#2A3A5C] text-[#9DB4E0]', onClick: onContinue }}>
-        <motion.h1
-          {...fadeUp(1.1)}
-          className="m-0 mb-3 max-w-[380px] whitespace-pre-line px-5 text-center text-[22px] font-bold leading-[1.4] tracking-[0.02em] text-[#9DB4E0]"
-          style={{ fontFamily: blind.kind === 'word-trigger' ? 'monospace' : GEORGIA }}
-        >
-          {blind.victoryLine}
-        </motion.h1>
-        <motion.p
-          {...fadeUp(1.6)}
-          className="m-0 mb-7 max-w-[300px] text-center text-[13px] leading-[1.6] text-[#5A6B88]"
-        >
-          Un humain va peut-être vous lire. Vous conservez {Math.round(state.hope)} d&apos;Espoir.
-        </motion.p>
-      </Overlay>
-    );
-  }
-
-  // --- Le silence du Ghosteur : rien. Un écran vide qui se retire seul. ---
+  // Le silence : un écran vide qui se retire seul, sans un mot.
   if (silentLoss) {
     return (
       <motion.div
@@ -99,10 +56,50 @@ export default function EndScreens({
     );
   }
 
-  // --- Défaite passive : gris plat, sans solennité ---
+  // La défaite parle par le mail de refus (RefusalMail), pas ici.
+  if (state.status === 'lost' && refusalPending) return null;
+
+  if (state.status === 'won') {
+    const machine = blind.kind === 'word-trigger';
+    return (
+      <Overlay
+        bg={isLastStep ? '#0B1710' : '#0B1220'}
+        btn={{
+          label: isLastStep ? 'terminer' : 'Continuer',
+          cls: isLastStep ? 'border-[#2D4A3C] text-[#7FA893]' : 'border-[#2A3A5C] text-[#9DB4E0]',
+          onClick: onContinue,
+        }}
+      >
+        <motion.h1
+          {...fadeUp(1.1)}
+          className={`m-0 mb-3 max-w-[420px] whitespace-pre-line px-5 text-center text-[22px] font-bold leading-[1.4] ${
+            isLastStep ? 'text-[#6EE7B7]' : 'text-[#9DB4E0]'
+          } ${machine ? 'font-mono tracking-[0.02em]' : ''}`}
+          style={machine ? undefined : { fontFamily: GEORGIA }}
+        >
+          {blind.victoryLine}
+        </motion.h1>
+        <motion.p
+          {...fadeUp(1.6)}
+          className={`m-0 mb-7 max-w-[320px] text-center text-[13px] leading-[1.6] ${
+            isLastStep ? 'text-[#5F8272]' : 'text-[#5A6B88]'
+          }`}
+        >
+          Vous conservez {Math.round(state.hope)} d&apos;Espoir.
+          {!isLastStep && ' Le processus continue.'}
+        </motion.p>
+      </Overlay>
+    );
+  }
+
+  // Passif : gris plat, sans-serif, sans solennité. Le vide ne mérite pas
+  // une belle typo. Ni puni ni récompensé : constaté.
   if (state.status === 'passive') {
     return (
-      <Overlay bg="#E9EBEE" btn={{ label: 'recommencer', cls: 'border-[#C6CBD4] text-[#9AA1AD]', onClick: onRestart }}>
+      <Overlay
+        bg="#E9EBEE"
+        btn={{ label: 'recommencer', cls: 'border-[#C6CBD4] text-[#9AA1AD]', onClick: onHome }}
+      >
         <motion.h1
           {...fadeUp(1.3)}
           className="m-0 mb-3 max-w-[360px] px-5 text-center text-[20px] font-semibold text-[#9AA1AD]"
@@ -119,39 +116,7 @@ export default function EndScreens({
     );
   }
 
-  // --- Défaite : ligne de mort du blind (monospace pour l'ATS, Georgia sinon) ---
-  const machine = blind.kind === 'word-trigger';
-  const title = state.lostReason === 'shattered' ? blind.deathLineShattered : blind.deathLineBelowSeuil;
-  const detail =
-    state.lostReason === 'belowSeuil' && !machine
-      ? `Dossier final : ${Math.round(state.hope)}. L'offre exigeait ${blind.seuil}.`
-      : null;
-
-  return (
-    <Overlay bg="#05070C" btn={{ label: 'recommencer', cls: 'border-[#3A3F4B] text-[#8A93A6]', onClick: onRestart }}>
-      <motion.h1
-        initial={{ opacity: 0, scale: 1.7, rotate: machine ? 0 : -4 }}
-        animate={{ opacity: 1, scale: 1, rotate: machine ? 0 : -4 }}
-        transition={{ delay: 1.3, duration: 0.3, ease: [0.2, 0.9, 0.3, 1] }}
-        className={`m-0 mb-5 max-w-[420px] whitespace-pre-line border-[3px] px-6 py-4 text-center font-bold leading-[1.4] ${
-          machine
-            ? 'border-[#8A93A6] font-mono text-[22px] tracking-[0.02em] text-[#C4CBD6]'
-            : 'border-[var(--danger-bright)] text-[26px] tracking-[0.03em] text-[var(--danger-bright)]'
-        }`}
-        style={machine ? undefined : { fontFamily: GEORGIA }}
-      >
-        {title}
-      </motion.h1>
-      {detail && (
-        <motion.p
-          {...fadeUp(1.8)}
-          className="m-0 mb-7 max-w-[300px] text-center text-[13px] leading-[1.6] text-[#6B7280]"
-        >
-          {detail}
-        </motion.p>
-      )}
-    </Overlay>
-  );
+  return null;
 }
 
 function Overlay({

@@ -1,5 +1,5 @@
 import { resolveEffects } from '@/lib/engine';
-import type { CardDef, GameState } from '@/lib/engine';
+import type { CardDef, Effect, GameState } from '@/lib/engine';
 
 /**
  * Règle d'information (CLAUDE.md §4) : tout ce que le joueur contrôle est
@@ -8,22 +8,24 @@ import type { CardDef, GameState } from '@/lib/engine';
  */
 export interface CardPreview {
   readonly text: string;
-  /** 'hope' = gain d'Espoir (bleu) ; 'neutral' = utilitaire (vert doux). */
   readonly tone: 'hope' | 'neutral';
   /** true = jouer cette carte franchit le seuil : la carte te montre la sortie. */
   readonly goal: boolean;
 }
 
-const NEUTRAL_LABELS: Partial<Record<CardDef['effects'][number]['kind'], string>> = {
+const NEUTRAL_LABELS: Partial<Record<Effect['kind'], string>> = {
   shieldNextBreak: 'réduit la prochaine casse',
   reduceRiskThisTurn: '− risque ce tour',
+  declareGaps: 'assume vos lacunes',
+  bypassLayers: 'joint le décideur',
+  exclusiveLock: 'ferme des options',
 };
 
 export function previewCard(state: GameState, def: CardDef, seuil: number): CardPreview {
   const after = resolveEffects(state, def.effects);
 
   if (after.hope !== state.hope) {
-    const goal = after.hope >= seuil;
+    const goal = seuil > 0 && after.hope >= seuil;
     return {
       text: `${Math.round(state.hope)} → ${Math.round(after.hope)}${goal ? ' ✓' : ''}`,
       tone: 'hope',
@@ -31,8 +33,8 @@ export function previewCard(state: GameState, def: CardDef, seuil: number): Card
     };
   }
 
-  // Fallback vide : une carte sans gain d'Espoir ni libellé connu n'affiche
-  // pas de pastille (jamais un tiret décoratif à l'écran — voix du texte, CLAUDE.md §8).
+  // Fallback vide : une carte sans gain d'Espoir ni libellé connu n'affiche pas
+  // de pastille (jamais un tiret décoratif à l'écran, CLAUDE.md §8).
   const kind = def.effects[0]?.kind;
   return {
     text: (kind && NEUTRAL_LABELS[kind]) ?? '',

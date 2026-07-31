@@ -1,11 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRef, useState } from 'react';
-import { CARD_DEFS, isBlocked, SLICE_RUN } from '@/lib/engine';
+import { useEffect, useRef, useState } from 'react';
+import { ACTE_I_POOLS, CARD_DEFS, currentSeuil, isBlocked } from '@/lib/engine';
 import type { Blind, GameState } from '@/lib/engine';
 import { useCombatStore } from '@/lib/ui/combatStore';
 import { previewCard, riskLine } from '@/lib/ui/preview';
+import AchievementToast from './AchievementToast';
 import ActivityFeed from './ActivityFeed';
 import Backdrop from './Backdrop';
 import BlindPanel from './BlindPanel';
@@ -13,55 +14,114 @@ import EndScreens from './EndScreens';
 import HandCard from './HandCard';
 import HomeScreen from './HomeScreen';
 import HopeCounter from './HopeCounter';
+import JobBoard from './JobBoard';
 import OfferPanel from './OfferPanel';
+import RefusalMail from './RefusalMail';
 
-/** La sous-ligne sous le compteur : brouillard du côté du système (CLAUDE.md §4). */
+/** La sous-ligne sous le compteur : brouillard du côté du système (§4). */
 function sublineFor(blind: Blind, state: GameState): { text: string; risky: boolean } {
-  if (blind.kind === 'silent-decay') {
-    if (state.hope <= 0) return { text: 'Le silence a gagné.', risky: false };
-    return { text: 'Aucune réponse ne vient. Votre Espoir se décompose.', risky: state.hope >= 30 };
+  switch (blind.kind) {
+    case 'silent-decay':
+      return state.hope <= 0
+        ? { text: 'Le silence a gagné.', risky: false }
+        : { text: 'Aucune réponse ne vient. Votre Espoir se décompose.', risky: state.hope >= 30 };
+    case 'word-trigger':
+      return { text: 'Le filtre ne lit que les mots-clés.', risky: false };
+    case 'escalating-demands':
+      return state.blindState.transparent
+        ? { text: 'Vous avez dit ce que vous ne saviez pas faire.', risky: false }
+        : { text: 'La liste des exigences continue de s’allonger.', risky: true };
+    case 'nested-layers':
+      return { text: 'Votre interlocuteur n’est pas le décideur.', risky: false };
+    case 'no-resolution':
+      return { text: 'Votre dossier est en cours de traitement.', risky: false };
+    case 'scripted-loss':
+      return { text: 'L’échange se passe très bien.', risky: false };
+    default:
+      return riskLine(state, blind.computeRisk);
   }
-  if (blind.kind === 'word-trigger') {
-    return { text: 'Le filtre ne lit que les mots-clés.', risky: false };
-  }
-  return riskLine(state, blind.computeRisk);
 }
 
 /**
- * La scène (V0.5). Décor de bureau, fenêtre du logiciel RH au centre, offre en
+ * La scène. Décor de bureau, fenêtre du logiciel RH au centre, offre en
  * document, log en fil de notifications. L'UI LIT l'état et FOURNIT les rolls,
- * jamais une règle. Elle orchestre aussi la run (accueil → ATS → Ghosteur).
+ * jamais une règle. Elle orchestre la run : accueil, job board, combat, refus.
  */
 export default function CombatScreen() {
   const store = useCombatStore();
-  const { phase, blindIndex, state, fx, animating } = store;
+  const { phase, state, blind, offer, fx, animating, refusal, newAchievements } = store;
   const dropZoneRef = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
 
-  // La run naît côté client (bouton « Postuler ») : le premier rendu serveur est
-  // l'accueil, identique au premier rendu client. Zéro mismatch d'hydratation.
-  if (phase === 'home' || !state) {
+  // La méta vit dans le navigateur : lue APRÈS l'hydratation, jamais au rendu
+  // serveur (sinon mismatch garanti).
+  useEffect(() => {
+    store.loadMeta();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const toasts = (
+    <AchievementToast ids={newAchievements} onDismiss={store.dismissAchievements} />
+  );
+
+  if (refusal) {
+    return (
+      <>
+        <RefusalMail
+          refusal={refusal}
+          skippable={store.refusalSkippable}
+          onClose={store.closeRefusal}
+        />
+        {toasts}
+      </>
+    );
+  }
+
+  if (phase === 'home') {
     return (
       <div className="relative">
         <Backdrop />
         <div className="relative z-10">
-          <HomeScreen onPlay={() => store.startRun()} />
+          <HomeScreen onPlay={() => store.startRun()} meta={store.meta} />
         </div>
+        {toasts}
       </div>
     );
   }
 
-  const blind = SLICE_RUN[blindIndex] ?? SLICE_RUN[0]!;
+  if (phase === 'board') {
+    return (
+      <div className="relative">
+        <Backdrop />
+        <div className="relative z-10">
+          <JobBoard
+            offers={store.offers}
+            step={store.step}
+            totalSteps={ACTE_I_POOLS.length}
+            carriedHope={state?.hope ?? 0}
+            onPick={store.pickOffer}
+          />
+        </div>
+        {toasts}
+      </div>
+    );
+  }
+
+  if (!state || !blind) return <div className="h-dvh" />;
+
   const isGhost = blind.kind === 'silent-decay';
+  const isFictif = blind.kind === 'no-resolution';
+  const canLeaveHere = (isGhost || isFictif) && !state.blindState.leaveLocked;
   const playing = state.status === 'playing';
   const frozen = !playing || animating;
   const subline = sublineFor(blind, state);
+  const seuil = currentSeuil(state, blind);
 
   const canPlaySomething = state.hand.some((inst) => {
     const def = CARD_DEFS[inst.defId];
     return def !== undefined && def.cost <= state.energy && !isBlocked(def, blind);
   });
-  const ctaPulse = playing && !animating && (isGhost || !canPlaySomething);
+  const ctaPulse = playing && !animating && (canLeaveHere || !canPlaySomething);
 
   const isPointInDropZone = (x: number, y: number): boolean => {
     const r = dropZoneRef.current?.getBoundingClientRect();
@@ -74,7 +134,7 @@ export default function CombatScreen() {
 
       <div className="relative z-10 mx-auto grid h-full max-w-[1520px] grid-cols-1 justify-center gap-6 lg:grid-cols-[300px_minmax(0,760px)_330px] lg:gap-8 lg:px-8 lg:py-8">
         <aside className="hidden flex-col justify-center lg:flex">
-          <OfferPanel blind={blind} />
+          <OfferPanel blind={blind} offer={offer} state={state} />
         </aside>
 
         <div className="flex h-full min-h-0 flex-col overflow-hidden bg-[var(--panel)] lg:rounded-[22px] lg:border lg:border-[var(--line)] lg:shadow-[0_24px_70px_rgba(28,35,51,0.12)]">
@@ -84,7 +144,7 @@ export default function CombatScreen() {
             </span>
             <div className="flex items-center gap-1.5">
               <span className="rounded-full border border-[var(--line)] bg-[var(--bg)] px-2.5 py-1 text-[12px] font-semibold text-[var(--muted)]">
-                Étape {blindIndex + 1} / {SLICE_RUN.length}
+                Étape {store.step + 1} / {ACTE_I_POOLS.length}
               </span>
               <span className="rounded-full border border-[var(--line)] bg-[var(--bg)] px-2.5 py-1 text-[12px] font-semibold text-[var(--muted)]">
                 Tour {Math.min(state.turn, blind.maxTurns)} / {blind.maxTurns}
@@ -101,23 +161,29 @@ export default function CombatScreen() {
             </div>
           </header>
 
-          <BlindPanel blind={blind} />
+          <BlindPanel blind={blind} state={state} />
 
-          <div className="flex items-center justify-between px-5 pt-2">
-            {blind.kind === 'word-trigger' ? (
-              <span className="rounded-full border border-[#F0DDBC] bg-[#FFF6E8] px-2.5 py-1 text-[12px] font-bold text-[var(--ink)]">
-                Mot exigé :{' '}
-                <span className="font-mono">{blind.requiredKeyword}</span>
-              </span>
-            ) : isGhost ? (
-              <span className="rounded-full border border-[var(--line)] bg-[var(--bg)] px-2.5 py-1 text-[12px] font-semibold text-[var(--muted)]">
-                En attente de réponse
-              </span>
-            ) : (
-              <span className="rounded-full border border-[#F0DDBC] bg-[#FFF6E8] px-2.5 py-1 text-[12px] font-bold text-[var(--ink)]">
-                L&apos;offre exige : {blind.seuil} d&apos;Espoir
-              </span>
-            )}
+          {/* La Liste Infinie : les exigences révélées s'empilent, visiblement. */}
+          {state.blindState.demands.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 border-b border-[var(--line)] bg-[var(--bg)] px-5 py-2.5">
+              {state.blindState.demands.map((d, i) => (
+                <motion.span
+                  key={`${d}-${i}`}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className={`rounded-full px-2 py-0.5 text-[10.5px] font-semibold ${
+                    state.blindState.transparent
+                      ? 'bg-[var(--green-soft)] text-[var(--green)]'
+                      : 'bg-[#FFEDE5] text-[#C2410C]'
+                  }`}
+                >
+                  {d}
+                </motion.span>
+              ))}
+            </div>
+          )}
+
+          <div className="flex items-center justify-end px-5 pt-2">
             <span className="text-[11px] text-[var(--muted)]">
               Pioche {state.drawPile.length} · Défausse {state.discardPile.length}
             </span>
@@ -131,21 +197,20 @@ export default function CombatScreen() {
                 className="pointer-events-none absolute inset-3 z-10 rounded-[18px] border-2 border-dashed border-[#C9D8F7] bg-[var(--blue-soft)]/20"
               />
             )}
-            <HopeCounter hope={state.hope} seuil={blind.seuil} fx={fx} subline={subline} />
+            <HopeCounter hope={state.hope} seuil={seuil} fx={fx} subline={subline} />
           </div>
 
           <div className="grid grid-cols-3 gap-2.5 px-3.5 pb-1 pt-2 lg:gap-4 lg:px-6">
             {state.hand.map((inst) => {
               const def = CARD_DEFS[inst.defId];
               if (!def) return null;
-              const blocked = isBlocked(def, blind);
               return (
                 <HandCard
                   key={inst.uid}
                   def={def}
-                  preview={previewCard(state, def, blind.seuil)}
+                  preview={previewCard(state, def, seuil)}
                   disabled={frozen || def.cost > state.energy}
-                  blocked={blocked}
+                  blocked={isBlocked(def, blind)}
                   requiredKeyword={blind.requiredKeyword}
                   onPlay={() => store.playCard(inst.uid)}
                   isPointInDropZone={isPointInDropZone}
@@ -156,53 +221,38 @@ export default function CombatScreen() {
           </div>
 
           <div className="flex gap-2 px-4 pb-1.5 pt-2.5 lg:gap-3 lg:px-6 lg:pt-4">
-            {isGhost ? (
-              <>
-                <button
-                  onClick={store.endTurn}
-                  disabled={frozen}
-                  className="flex-1 cursor-pointer rounded-[var(--radius)] border border-[var(--line)] bg-[var(--panel)] p-3.5 text-[13.5px] font-bold text-[var(--muted)] hover:enabled:bg-[#EEF1F6] disabled:cursor-default disabled:opacity-30 lg:p-4 lg:text-[14.5px]"
-                >
-                  Attendre encore
-                </button>
-                <motion.button
-                  onClick={store.leave}
-                  disabled={frozen}
-                  animate={
-                    ctaPulse
-                      ? { boxShadow: ['0 0 0 0 rgba(255,138,101,0)', '0 0 0 9px rgba(255,138,101,0.18)', '0 0 0 0 rgba(255,138,101,0)'] }
-                      : { boxShadow: '0 0 0 0 rgba(255,138,101,0)' }
-                  }
-                  transition={ctaPulse ? { duration: 1.6, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.2 }}
-                  className="flex-1 cursor-pointer rounded-[var(--radius)] border-none bg-[var(--corail)] p-3.5 text-[13.5px] font-bold text-white hover:enabled:brightness-95 disabled:cursor-default disabled:opacity-30 lg:p-4 lg:text-[14.5px]"
-                >
-                  Partir
-                </motion.button>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={store.passTurn}
-                  disabled={frozen || state.playedThisTurn}
-                  className="flex-1 cursor-pointer rounded-[var(--radius)] border border-[var(--line)] bg-[var(--panel)] p-3.5 text-[13.5px] font-bold text-[var(--muted)] hover:enabled:bg-[#EEF1F6] disabled:cursor-default disabled:opacity-30 lg:p-4 lg:text-[14.5px]"
-                >
-                  Passer le tour
-                </button>
-                <motion.button
-                  onClick={store.endTurn}
-                  disabled={frozen}
-                  animate={
-                    ctaPulse
-                      ? { boxShadow: ['0 0 0 0 rgba(61,107,224,0)', '0 0 0 9px rgba(61,107,224,0.18)', '0 0 0 0 rgba(61,107,224,0)'] }
-                      : { boxShadow: '0 0 0 0 rgba(61,107,224,0)' }
-                  }
-                  transition={ctaPulse ? { duration: 1.6, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.2 }}
-                  className="flex-1 cursor-pointer rounded-[var(--radius)] border-none bg-[var(--ink)] p-3.5 text-[13.5px] font-bold text-white hover:enabled:bg-[#2A3346] disabled:cursor-default disabled:opacity-30 lg:p-4 lg:text-[14.5px]"
-                >
-                  Terminer le tour
-                </motion.button>
-              </>
-            )}
+            <button
+              onClick={canLeaveHere ? store.endTurn : store.passTurn}
+              disabled={frozen || (!canLeaveHere && state.playedThisTurn)}
+              className="flex-1 cursor-pointer rounded-[var(--radius)] border border-[var(--line)] bg-[var(--panel)] p-3.5 text-[13.5px] font-bold text-[var(--muted)] hover:enabled:bg-[#EEF1F6] disabled:cursor-default disabled:opacity-30 lg:p-4 lg:text-[14.5px]"
+            >
+              {canLeaveHere ? 'Attendre encore' : 'Passer le tour'}
+            </button>
+            <motion.button
+              onClick={canLeaveHere ? store.leave : store.endTurn}
+              disabled={frozen}
+              animate={
+                ctaPulse
+                  ? {
+                      boxShadow: [
+                        '0 0 0 0 rgba(61,107,224,0)',
+                        `0 0 0 9px ${canLeaveHere ? 'rgba(255,138,101,0.18)' : 'rgba(61,107,224,0.18)'}`,
+                        '0 0 0 0 rgba(61,107,224,0)',
+                      ],
+                    }
+                  : { boxShadow: '0 0 0 0 rgba(61,107,224,0)' }
+              }
+              transition={
+                ctaPulse ? { duration: 1.6, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.2 }
+              }
+              className={`flex-1 cursor-pointer rounded-[var(--radius)] border-none p-3.5 text-[13.5px] font-bold text-white disabled:cursor-default disabled:opacity-30 lg:p-4 lg:text-[14.5px] ${
+                canLeaveHere
+                  ? 'bg-[var(--corail)] hover:enabled:brightness-95'
+                  : 'bg-[var(--ink)] hover:enabled:bg-[#2A3346]'
+              }`}
+            >
+              {canLeaveHere ? 'Partir' : 'Terminer le tour'}
+            </motion.button>
           </div>
 
           <footer className="px-5 pb-3.5 pt-1 text-center">
@@ -223,11 +273,12 @@ export default function CombatScreen() {
       <EndScreens
         state={state}
         blind={blind}
-        isLastBlind={store.isLastBlind()}
-        onContinue={store.continueToNextBlind}
-        onRestart={() => store.startRun()}
-        onHome={() => store.toHome()}
+        isLastStep={store.isLastStep}
+        onContinue={store.continueRun}
+        onHome={store.toHome}
+        refusalPending={refusal !== null}
       />
+      {toasts}
     </div>
   );
 }

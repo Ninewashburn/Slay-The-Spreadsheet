@@ -2,10 +2,10 @@
 
 > Règle : on n'implémente **que** la version courante. Les idées hors scope
 > vont dans `docs/GAME_DESIGN.md` (sections « parqué »), jamais dans le code.
-> État actuel : **V0.5 vertical slice COMPLÈTE** — une run ATS → Ghosteur
-> jouable de l'accueil à la fin, moteur pur (22 tests), PWA installable.
-> Prochaine version : V1 (l'Acte I). Calibrage à retester en playtest (seuils,
-> décomposition), contenu des mots-clés à affiner (règle d'extraction).
+> État actuel : **V1 (Acte I) LIVRÉE** — job board, générateur par assemblage,
+> 5 blinds, système des mots, relique et succès. Moteur pur : 56 tests.
+> Prochaine version : V1.5 (profils + blinds vécus). Tout le calibrage de la V1
+> (seuils, couches, pénalités) attend le playtest.
 
 ---
 
@@ -69,21 +69,39 @@
 
 ---
 
-## V1 — L'Acte I complet
-- Le job board comme carte de run : 3 offres générées, l'offre EST le niveau,
-  ses « avantages » sont les règles, red flags à lire entre les lignes.
-- Générateur d'offres et de refus **par assemblage** (formule d'ouverture +
-  mot pivot + clôture) — contenu infini, zéro écriture à la pièce.
-- Blinds : Prétentions Salariales (passer = coup optimal), Le Poste Fictif,
-  L'Offre Mouton à Cinq Pattes (escalade d'exigences, se gagne en nommant ses
-  lacunes), La Poupée Russe (couches d'intermédiaires, le seuil monte et la
-  récompense fond), Le Manager qui a Pris un Senior (l'unique défaite scriptée).
-- Carte Exclusivité (double tranchant : son coût est une fermeture, elle retire
-  des cartes du run) — se trouve juste avant La Poupée Russe.
-- Le système des mots comme intents visibles (12 mots, échelle de gravité).
-- Relique « Expérience du candidat » : le mail de refus intégral est imblocable
-  UNE fois (run 1), puis la relique le saute à jamais. C'est la méta-progression.
-- Succès cachés (« Je savais », « Lu en diagonale », « Culture Fit »…).
+## V1 — L'Acte I complet — ✅ livrée
+- [x] Le job board comme carte de run : 3 offres générées par étape, l'offre EST
+      le niveau, son red flag porte le modificateur de règles (`applyOffer` :
+      seuil ×, tours ±, Énergie −, ou verrouillage de Partir). 5 étapes.
+      (`components/combat/JobBoard.tsx`)
+- [x] Générateur **par assemblage** (`lib/engine/generator.ts`) : offre =
+      intitulé + avantages (dont vide légal) + red flag + fourchette au centime
+      près ; refus = ouverture + délai + mot pivot + clôture. Même seed, même
+      job board. Un test vérifie qu'aucun texte généré ne viole la voix (§8).
+- [x] Blinds (`lib/engine/blinds.ts`), un `BlindKind` par famille de règle :
+      Prétentions Salariales (`number-first` : chaque carte est un chiffre
+      annoncé, se taire ne coûte rien), Le Poste Fictif (`no-resolution` :
+      l'Espoir investi s'évapore, partir le conserve), Mouton à Cinq Pattes
+      (`escalating-demands` : la Liste Infinie, neutralisée par Transparence
+      assumée), La Poupée Russe (`nested-layers` : zéro PV, le seuil monte, la
+      récompense fond, les tours ne se réinitialisent pas), Le Manager
+      (`scripted-loss` : l'unique défaite sans sortie du jeu).
+- [x] Carte Exclusivité : son coût est une **fermeture** (retire du run toutes
+      les cartes utilitaires, main, pioche ET défausse). Plus Transparence
+      assumée (×2, garantie : garde-fou anti-arbitraire) et Contact direct.
+- [x] Le système des mots (`lib/engine/words.ts`) : 12 mots, échelle de gravité,
+      le mot pivot est choisi par le MOTEUR selon l'écart Espoir/seuil, puis
+      tombe à l'écran avant la phrase.
+- [x] Relique « Expérience du candidat » (`lib/engine/meta.ts`) : le mail de
+      refus s'écrit lettre par lettre et est imblocable la première fois ;
+      ensuite la relique donne le droit de le fermer aussitôt.
+- [x] Succès cachés (8), dont « Je savais » (fermer le refus avant d'avoir lu le
+      mot pivot), « Culture Fit », « Jamais en premier », « Déjà engagé ».
+
+**Ouvert (playtest)** : tout le calibrage V1 (seuils, couches, pénalité
+d'exigence à 25 %, décroissance de récompense). Les lignes de mort du Poste
+Fictif, de la Poupée Russe et des Prétentions Salariales sont des propositions,
+pas des extractions : à remplacer par de vraies phrases reçues.
 
 ## V1.5 — Les profils et les blinds vécus
 - Profils = deck + reliques de départ (jamais des drops) : **Junior** (beaucoup
