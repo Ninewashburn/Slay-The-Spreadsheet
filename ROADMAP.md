@@ -76,7 +76,10 @@
   mot pivot + clôture) — contenu infini, zéro écriture à la pièce.
 - Blinds : Prétentions Salariales (passer = coup optimal), Le Poste Fictif,
   L'Offre Mouton à Cinq Pattes (escalade d'exigences, se gagne en nommant ses
-  lacunes), Le Manager qui a Pris un Senior (l'unique défaite scriptée du jeu).
+  lacunes), La Poupée Russe (couches d'intermédiaires, le seuil monte et la
+  récompense fond), Le Manager qui a Pris un Senior (l'unique défaite scriptée).
+- Carte Exclusivité (double tranchant : son coût est une fermeture, elle retire
+  des cartes du run) — se trouve juste avant La Poupée Russe.
 - Le système des mots comme intents visibles (12 mots, échelle de gravité).
 - Relique « Expérience du candidat » : le mail de refus intégral est imblocable
   UNE fois (run 1), puis la relique le saute à jamais. C'est la méta-progression.

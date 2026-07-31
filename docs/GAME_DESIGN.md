@@ -78,6 +78,7 @@ offres, la structure moteur (isBlocked / requiredKeyword) ne bouge pas.
 | **Prétentions Salariales** | Chaque carte jouée = un chiffre annoncé. Passer est le coup optimal. Règle cachée : ne jamais parler en premier. | — |
 | **Le Poste Fictif** | L'offre n'a jamais été ouverte. Pas de résolution possible. | (information neutre, ticket fermé) |
 | **L'Offre Mouton à Cinq Pattes** | Escalade : chaque tour révèle une exigence de plus, tirée au hasard, sans limite. Impossible à couvrir par construction. Se gagne en NOMMANT ses lacunes (Transparence assumée), pas en cochant les cases. Récompense affichée fluctuante (La Fourchette Schrödinger). Fiche détaillée ci-dessous. | « Votre profil est intéressant mais nous cherchons quelqu'un de plus polyvalent. » |
+| **La Poupée Russe** | Formes successives quasi identiques, seul le badge change. Chaque couche franchie **relève le seuil** exigé, le compteur de tours ne se réinitialise pas, et la récompense affichée fond. Zéro PV. Fiche détaillée ci-dessous. | (à définir) ; la ligne de **victoire** est « Le décideur vous recevra ultérieurement. » |
 | **Le Manager qui a Pris un Senior** | Tout réussi, défaite scriptée. **L'UNIQUE boss sans sortie du jeu** — sa ligne est la plus humaine : | « NOUS AVONS RETENU UN AUTRE PROFIL » (politesse comparative : on ne te dit pas que tu étais mauvais, on te dit qu'il y avait mieux) |
 
 #### Fiche — L'Offre Mouton à Cinq Pattes
@@ -139,6 +140,18 @@ précision EST la blague, ne jamais arrondir. (Variante parquée : un curseur
 « devinez la vraie fourchette » à placer soi-même, version interactive du même
 gag.)
 
+**Parqué — « devine mon salaire » (outil séparé ou mini-jeu)** : écarté sous
+cette forme, pour trois raisons. (1) Formulé « selon la stack et l'expérience »,
+il ne parle qu'aux développeurs (§3, désjargonnage ci-dessus). (2) En projet
+séparé, sa valeur tient à 100 % à la qualité d'une base salariale : sans données
+réelles, l'outil ment avec assurance, et il diviserait l'effort avant même le
+premier playtest du slice. (3) En mini-jeu scoré, il rouvrirait une 3e ressource
+et CONTREDIRAIT Prétentions Salariales, dont la règle cachée est « ne jamais
+parler en premier » : faire annoncer un chiffre au joueur enseigne l'inverse.
+Forme conservée = le curseur ci-dessus, où la révélation n'est pas « as-tu bien
+estimé le marché ? » mais « ton estimation n'avait aucune importance » (le budget
+réel était sous le bas de la fourchette, ou le poste part en mobilité interne).
+
 **Flavor (extraction, ne rien ajouter)** : titre « Nous recherchons un profil
 rare » · apparition « Maîtrise de quatre domaines exigée. Poste junior. » ·
 révélation d'exigence « Ah, et une très forte expertise en [X]. » · défaite du
@@ -162,6 +175,75 @@ parodient l'annonce impossible, mais diffèrent.
 | Nature | Contradiction **figée** (junior ET senior) | **Escalade** dans le temps |
 | Lecture | Visible d'emblée sur l'annonce | Se découvre tour après tour |
 | Victoire | (à définir) | Transparence assumée |
+
+#### Fiche — La Poupée Russe
+
+**Le gag universel** : tu bats un interlocuteur, et derrière il y en a un autre,
+identique, qui t'annonce qu'il n'est pas non plus le décideur. Puis encore un
+autre. Le vrai décideur n'est jamais atteint. Aucune connaissance d'un secteur
+n'est requise : c'est le ressort du service client qui transfère en boucle.
+**Garder cette lecture-là comme référence d'écriture**, jamais le vocabulaire
+des intermédiaires professionnels.
+
+**⚠ Correction d'architecture obligatoire (pas de PV)** : le brouillon prévoyait
+que « chaque forme vaincue restaure une partie des PV de la suivante ». Les PV
+sont le modèle explicitement écarté (CLAUDE.md §1 : un blind est une règle + un
+seuil, jamais une créature). Version correcte, et plus cruelle :
+- plusieurs **formes successives**, visuellement quasi identiques, seul un badge
+  change (« Intermédiaire », « Second intermédiaire », « Partenaire de
+  l'intermédiaire »…) ;
+- **chaque couche franchie RELÈVE le seuil d'Espoir exigé** : tu approches, la
+  barre monte, tu approches encore ;
+- **le compteur de tours ne se réinitialise pas** entre les couches : la
+  pression monte mécaniquement.
+
+Aucun PV nécessaire. Le sentiment que l'énergie dépensée est absorbée par la
+chaîne est rendu par le seuil qui se dérobe, pas par une barre de vie.
+
+**Twist — la récompense qui fond** : à chaque couche franchie, la récompense
+finale affichée diminue (chaque intermédiaire prend sa marge). Le joueur voit le
+gain fondre pendant qu'il se bat. Cousin de la Fourchette Schrödinger (fiche
+ci-dessus) : les deux jouent sur un chiffre affiché qui ne veut rien dire, mais
+ils ne font PAS doublon — ici le chiffre décroît de façon lisible, là il fluctue
+au hasard.
+
+**Condition de sortie (à tester en playtest)** :
+- **Option A (satirique)** : impossible de gagner par la force. Il faut une carte
+  type *Contact direct* / *Réseau* pour court-circuiter la chaîne.
+- **Option B (endurance)** : on peut aller au bout, mais la récompense est
+  devenue si faible que la leçon est ailleurs.
+
+⚠ Si l'option A est retenue, appliquer le même garde-fou que pour le Mouton à
+Cinq Pattes : une victoire qui dépend d'UNE SEULE carte non garantie se lit
+comme arbitraire si elle n'est pas piochée.
+
+**Flavor** : forme 1 « Je transmets votre profil à mon partenaire. » · forme 2
+« Je transmets votre profil au client. » · forme 3 « Le client souhaite un
+dernier échange avec son prestataire. » · victoire « Le décideur vous recevra
+ultérieurement. »
+
+**Reformulé** : le brouillon disait « Vous rencontrerez le décideur au prochain
+run ». Drôle, mais ça casse la fiction en nommant le run. La version retenue dit
+la même chose en restant dans la langue de l'institution.
+
+**Chevauchement à documenter** (sinon deux blinds redondants seront créés) : ce
+blind coexiste avec « La Cascade N1/N2/N3 » (Actes II+).
+
+| | La Cascade N1/N2/N3 | La Poupée Russe |
+|---|---|---|
+| Effet | **Annule ta progression** à chaque étape | **Déplace la cible** (seuil qui monte) |
+| Récompense | inchangée | **fond à chaque couche** |
+| Ressenti | on recommence | on n'arrive jamais |
+
+**Ton et anonymisation** : la cible est le système et sa complexité absurde,
+jamais les personnes qui y travaillent. Les formes restent des fonctions
+génériques, jamais des portraits. Aucune entreprise réelle nommée (CLAUDE.md §2).
+
+**Lien avec la carte Exclusivité** (§6, double tranchant) : les deux idées
+viennent de la même situation vécue et se complètent. La Poupée Russe montre la
+chaîne d'intermédiaires, l'Exclusivité montre le coût d'y entrer. Elles peuvent
+former un mini-acte cohérent, l'Exclusivité étant trouvée juste avant le blind
+à couches.
 
 ### Blinds vécus (V1.5) — extraits de 8 histoires réelles, 8 causes de mort distinctes, zéro méchant
 | Blind | Origine | Règle | Ligne de mort |
@@ -218,6 +300,12 @@ mais celui-ci est une contradiction FIGÉE, visible d'emblée sur l'annonce ;
 l'autre est une ESCALADE qui se découvre tour après tour. Voir la table de
 comparaison dans la fiche du Mouton à Cinq Pattes.
 
+**Note croisée — La Cascade N1/N2/N3** : ne pas la confondre avec La Poupée
+Russe (Acte I). La Cascade ANNULE ta progression à chaque étape (on recommence) ;
+la Poupée Russe DÉPLACE la cible en relevant le seuil (on n'arrive jamais), et
+sa récompense fond à chaque couche. Voir la table de comparaison dans la fiche
+de La Poupée Russe.
+
 ### Événements d'ambiance (entre deux blinds, V1.5)
 Pas des blinds : des interruptions courtes pendant la recherche (concrétise la
 piste « caméra café »). **Le Webinaire** — « Boostez votre carrière avec l'IA ».
@@ -267,6 +355,33 @@ Disponible immédiatement (×2 vitesse, −confiance : suspect) · Mode Créateu
 Télétravail Partiel) · **« On est une famille »** (+Espoir, **verrouille
 l'action Partir** — on ne quitte pas sa famille ; te retire ta seule victoire
 contre le Ghosteur).
+
+**Exclusivité** (la plus forte de la catégorie) — la SEULE carte de la banque
+dont le coût est une **fermeture**, pas un malus. Les autres double-tranchant
+modifient des valeurs (1h20 de Trajet : malus chiffré ; Mode Créateur : un plus
+et un moins ; Disponible immédiatement : vitesse contre confiance) ; celle-ci
+**retire des options du jeu**. La mécanique EST la définition du mot : extraction
+parfaite (CLAUDE.md §3). Même famille que « On est une famille », qui verrouille
+l'action Partir : les cartes qui te retirent quelque chose au lieu d'en diminuer
+la valeur.
+- **Effet immédiat positif** (elle doit être tentante) : avance d'une étape, gain
+  d'Énergie, ou saute une phase de blind.
+- **Effet permanent négatif** : pour le reste du run, toutes les autres cartes de
+  la même catégorie sont retirées de la main ET de la pioche.
+- **Variante retenue, face cachée** : le joueur voit le bonus, pas l'engagement
+  auquel il souscrit ; le contenu réel n'est révélé qu'au tour suivant. Parodie
+  directe d'un engagement signé avant de savoir sur quoi il porte.
+- **⚠ Question ouverte (tension avec la règle d'information, §4)** : « précis de
+  ton côté, brouillard du leur ». C'est SA carte, son coût devrait donc lui être
+  lisible. Deux voies, préférence pour la première : (1) la carte affiche
+  « engagement exclusif » sans détailler ce qu'elle ferme, assez pour se méfier,
+  pas assez pour calculer ; (2) assumer l'exception UNE seule fois (première
+  partie), puis marquer l'effet complet au codex pour les runs suivants.
+- **Flavor** : « Vous acceptez d'être représenté exclusivement. Par qui ? On vous
+  le dira après. » · au déclenchement de l'effet négatif : « Ces cartes ne vous
+  sont plus accessibles. Vous êtes déjà engagé. »
+- Voir aussi le blind **La Poupée Russe** (§5, Acte I) : même situation source,
+  les deux forment un mini-acte cohérent.
 
 **Pas les bons codes / réseau** (à trancher) — l'inversion de Cooptation : et si
 l'ABSENCE de réseau était un débuff, plutôt que Cooptation un buff ? Deux angles
@@ -380,6 +495,10 @@ tiret cadratin, phrases courtes), donc utilisables tels quels :
   que tu ne maîtrises pas. Sur un poste flou, la lucidité te distingue plus
   sûrement que l'exhaustivité. Elle te protège aussi d'un entretien qui
   démonterait le bluff. »
+- *Exclusivité / La Poupée Russe* : « Avant de signer une exclusivité, demande
+  qui est le client final. Une exclusivité porte sur une opportunité précise, pas
+  sur tout un secteur. Si tu ne sais pas sur quoi tu t'engages, tu ne peux pas
+  savoir ce que tu fermes. »
 
 ## 11. Le PNJ récurrent (V1)
 
