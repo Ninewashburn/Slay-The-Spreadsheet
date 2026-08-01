@@ -81,8 +81,15 @@ export interface Blind {
   /** Ligne de mort quand la run se termine sous le seuil. */
   readonly deathLineBelowSeuil: string;
   readonly victoryLine: string;
-  /** La règle du blind, en langage d'entreprise. Affichée, jamais expliquée. */
+  /** Le FLAVOR : qui parle, dans la langue de l'entreprise. */
   readonly rule: string;
+  /**
+   * La MÉCANIQUE : ce qui se passe, en une ligne sèche. Le flavor dit qui parle,
+   * la mécanique dit ce que ça fait. Les deux, toujours, jamais l'un sans
+   * l'autre (constat de playtest : un joueur non initié ne peut pas deviner que
+   * passer son tour est le coup optimal contre Prétentions Salariales).
+   */
+  readonly mechanic: string;
   /**
    * Le mot exact exigé par l'offre (blinds `word-trigger` uniquement). Toute
    * carte qui ne le porte pas est BLOQUÉE, pas affaiblie. « Angular » ≠ « AngularJS ».

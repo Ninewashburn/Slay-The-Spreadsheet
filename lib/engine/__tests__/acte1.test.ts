@@ -13,6 +13,7 @@ import {
 import { applyAction, canLeave, createInitialState, currentSeuil } from '../reducer';
 import { generateJobBoard, generateOffer, generateRefusal } from '../generator';
 import { gravityFor, INTENT_WORDS, pickWord } from '../words';
+import { BLINDS_BY_ID } from '../blinds';
 import {
   EMPTY_META,
   evaluateAchievements,
@@ -66,8 +67,58 @@ describe('le générateur par assemblage', () => {
 
   it('un refus contient son mot pivot, et le mot est annoncé à part', () => {
     const refusal = generateRefusal(mulberry32(13), 4);
-    expect(refusal.body).toContain(refusal.pivot.toLowerCase());
+    expect(refusal.body.toLowerCase()).toContain(refusal.pivot.toLowerCase());
     expect(refusal.body.length).toBeGreaterThan(40);
+  });
+
+  // Régression de playtest : « Après étude attentive de votre dossier, bien que,
+  // nous avons retenu un autre profil. » Les mots pivots ne sont PAS
+  // interchangeables. Une faute de grammaire se lit comme un bug, pas comme une
+  // blague : la langue impeccable EST la satire (CLAUDE.md §3).
+  it('non-régression : aucun subordonnant n’est laissé sans son complément', () => {
+    const closing = 'nous avons retenu un autre profil.';
+    for (const intent of INTENT_WORDS) {
+      const phrase = intent.render(closing);
+      expect(phrase.startsWith(intent.word)).toBe(true);
+      expect(phrase.endsWith(closing)).toBe(true);
+
+      // Ce que le gabarit insère entre le mot et la clôture. Un subordonnant
+      // exige un complément : une simple virgule ne suffit pas.
+      const bridge = phrase.slice(intent.word.length, phrase.length - closing.length).trim();
+      if (intent.syntax === 'subordonnant') {
+        expect(bridge.length).toBeGreaterThan(3);
+        expect(bridge).not.toBe(',');
+      } else {
+        expect(bridge.length).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('chaque mot pivot produit une phrase complète, quelle que soit la clôture', () => {
+    const closings = [
+      'nous ne donnerons pas suite à votre candidature.',
+      'nous poursuivons nos recherches.',
+    ];
+    for (const intent of INTENT_WORDS) {
+      for (const closing of closings) {
+        const phrase = intent.render(closing);
+        expect(phrase.endsWith(closing)).toBe(true);
+        // Aucune virgule collée à un mot isolé, aucun double espace.
+        expect(phrase).not.toContain('  ');
+        expect(phrase).not.toContain(' ,');
+      }
+    }
+  });
+
+  it('sur 120 seeds, aucun refus ne reproduit la faute du playtest', () => {
+    for (let seed = 0; seed < 120; seed++) {
+      const { body } = generateRefusal(mulberry32(seed), (seed % 5) + 1);
+      // La faute observée : « …, bien que, nous avons retenu un autre profil. »
+      // (« Certes, » est correct : son gabarit fournit la concession puis « mais ».)
+      expect(body).not.toMatch(/(Bien que|Malgré|Nonobstant),/);
+      expect(body).not.toContain('  ');
+      expect(body).not.toContain('..');
+    }
   });
 
   it('aucun texte généré ne contient de tiret cadratin ni de Markdown (CLAUDE.md §8)', () => {
@@ -79,6 +130,49 @@ describe('le générateur par assemblage', () => {
         expect(t).not.toContain('—');
         expect(t).not.toContain('**');
       }
+    }
+  });
+});
+
+// Constat de playtest : trois offres quasi identiques ne proposent aucun
+// arbitrage. Le job board doit offrir un CHOIX, pas trois portes semblables.
+describe('le job board propose un vrai choix', () => {
+  it('les red flags d’un même board sont tous différents', () => {
+    for (let seed = 0; seed < 30; seed++) {
+      const board = generateJobBoard(mulberry32(seed), ['ats', 'mouton', 'poupee']);
+      const labels = board.map((o) => o.redFlag.label);
+      expect(new Set(labels).size).toBe(labels.length);
+    }
+  });
+
+  it('les contraintes viennent de familles distinctes : le choix est réel', () => {
+    for (let seed = 0; seed < 30; seed++) {
+      const board = generateJobBoard(mulberry32(seed), ['ats', 'mouton', 'poupee']);
+      const kinds = board.map((o) => o.redFlag.modifier.kind);
+      expect(new Set(kinds).size).toBeGreaterThanOrEqual(2);
+    }
+  });
+
+  it('aucun avantage n’est répété d’une offre à l’autre du même board', () => {
+    const board = generateJobBoard(mulberry32(9), ['ats', 'mouton', 'poupee']);
+    const all = board.flatMap((o) => o.advantages);
+    expect(new Set(all).size).toBe(all.length);
+  });
+});
+
+describe('chaque blind dit ce qu’il FAIT, pas seulement qui il est', () => {
+  it('tous les blinds portent un flavor ET une mécanique, distincts', () => {
+    for (const blind of Object.values(BLINDS_BY_ID)) {
+      expect(blind.rule.length).toBeGreaterThan(10);
+      expect(blind.mechanic.length).toBeGreaterThan(10);
+      expect(blind.mechanic).not.toBe(blind.rule);
+    }
+  });
+
+  it('les mécaniques respectent la voix du jeu (CLAUDE.md §8)', () => {
+    for (const blind of Object.values(BLINDS_BY_ID)) {
+      expect(blind.mechanic).not.toContain('—');
+      expect(blind.mechanic).not.toContain('**');
     }
   });
 });

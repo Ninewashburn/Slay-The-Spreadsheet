@@ -35,12 +35,20 @@ export default function BlindPanel({
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-[14px] font-bold text-[var(--ink)] lg:text-[15px]">{name}</div>
+        {/* Le flavor dit QUI parle. */}
         <div className="truncate text-[12px] text-[var(--muted)] lg:text-[12.5px]">{rule}</div>
+        {/* La mécanique dit CE QUI SE PASSE. Jamais l'un sans l'autre. */}
+        <div className="mt-1 flex items-start gap-1.5">
+          <span className="mt-[3px] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--corail)]" />
+          <span className="text-[11.5px] font-semibold leading-snug text-[var(--ink)]">
+            {blind.mechanic}
+          </span>
+        </div>
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1">
         {blind.seuil > 0 && (
           <span className="rounded-full border border-[#F0DDBC] bg-[#FFF6E8] px-2.5 py-0.5 text-[11px] font-bold text-[var(--ink)]">
-            Dossier exigé : {currentSeuil(state, blind)}
+            Espoir exigé : {currentSeuil(state, blind)}
           </span>
         )}
         <span className="rounded-full border border-[var(--line)] bg-[var(--panel)] px-2.5 py-0.5 text-[11px] font-semibold text-[var(--muted)]">

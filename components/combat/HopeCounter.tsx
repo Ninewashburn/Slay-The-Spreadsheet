@@ -9,6 +9,8 @@ interface Props {
   readonly seuil: number;
   readonly fx: Fx;
   readonly subline: { readonly text: string; readonly risky: boolean };
+  /** Tours restants, seuil compris. Sert à dire « il reste N tours à tenir ». */
+  readonly turnsLeft: number;
 }
 
 /**
@@ -17,7 +19,7 @@ interface Props {
  * Le mot de la casse (« Cependant… ») tombe SUR l'ancien chiffre — l'état
  * commité arrive après, c'est le store qui tient la timeline.
  */
-export default function HopeCounter({ hope, seuil, fx, subline }: Props) {
+export default function HopeCounter({ hope, seuil, fx, subline, turnsLeft }: Props) {
   const numberControls = useAnimationControls();
   const zoneControls = useAnimationControls();
   const prevHope = useRef(hope);
@@ -80,20 +82,49 @@ export default function HopeCounter({ hope, seuil, fx, subline }: Props) {
         {Math.round(hope)}
       </motion.div>
 
-      <div
-        className={`mt-2 text-[11px] font-semibold ${reached ? 'text-[var(--green)]' : 'text-[var(--muted)]'}`}
-      >
-        <b className={reached ? 'text-[var(--green)]' : 'text-[var(--ink)]'}>{Math.round(hope)}</b>{' '}
-        / {seuil} exigés à la fin
-      </div>
+      {seuil > 0 && (
+        <div
+          className={`mt-2 text-[11px] font-semibold ${reached ? 'text-[var(--green)]' : 'text-[var(--muted)]'}`}
+        >
+          <b className={reached ? 'text-[var(--green)]' : 'text-[var(--ink)]'}>
+            {Math.round(hope)}
+          </b>{' '}
+          / {seuil} Espoir exigé à la fin
+        </div>
+      )}
 
-      <div
-        className={`mt-2 min-h-[18px] max-w-[280px] text-center text-[13px] ${
-          subline.risky ? 'font-semibold text-[var(--corail)]' : 'text-[var(--muted)]'
-        }`}
-      >
-        {hideSubline ? '' : subline.text}
-      </div>
+      {/*
+        Le moment central de la thèse : dépasser le seuil ne gagne pas, ça expose
+        plus longtemps (il est vérifié APRÈS le dernier jet). Le message à faire
+        passer n'est pas « bravo », c'est « TENIR ».
+      */}
+      {reached && seuil > 0 && !hideSubline ? (
+        <motion.div
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-2 flex max-w-[300px] flex-col items-center gap-1 text-center"
+        >
+          <span className="rounded-full bg-[var(--green-soft)] px-3 py-1 text-[12px] font-bold text-[var(--green)]">
+            Seuil atteint
+          </span>
+          <span className="text-[12.5px] font-semibold text-[var(--ink)]">
+            {turnsLeft <= 0
+              ? 'Il faut encore passer le dernier échange.'
+              : `Il reste ${turnsLeft} tour${turnsLeft > 1 ? 's' : ''} à tenir.`}
+          </span>
+          {subline.risky && (
+            <span className="text-[12px] text-[var(--corail)]">{subline.text}</span>
+          )}
+        </motion.div>
+      ) : (
+        <div
+          className={`mt-2 min-h-[18px] max-w-[280px] text-center text-[13px] ${
+            subline.risky ? 'font-semibold text-[var(--corail)]' : 'text-[var(--muted)]'
+          }`}
+        >
+          {hideSubline ? '' : subline.text}
+        </div>
+      )}
 
       <AnimatePresence>
         {fx?.kind === 'word' && (

@@ -1,4 +1,4 @@
-import { formatSalary } from '@/lib/engine';
+import { formatSalary, modifierLabel } from '@/lib/engine';
 import type { Blind, GameState, Offer } from '@/lib/engine';
 import { currentSeuil } from '@/lib/engine';
 
@@ -60,6 +60,20 @@ export default function OfferPanel({ blind, offer, state }: Props) {
             ))}
             {offer && <li className="font-semibold">{offer.redFlag.label}.</li>}
           </ul>
+        )}
+
+        {/*
+          Ce que l'« avantage » voulait dire, révélé une fois la candidature
+          envoyée. On ne le montre PAS sur le job board : le joueur apprend à
+          lire entre les lignes en le vivant, pas en lisant une notice (§10).
+        */}
+        {offer && (
+          <div className="mt-3 flex items-start gap-1.5 rounded-lg bg-[#FFEDE5] px-2.5 py-2">
+            <span className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--corail)]" />
+            <span className="text-[11px] font-semibold leading-snug text-[#C2410C]">
+              {modifierLabel(offer.redFlag.modifier)}
+            </span>
+          </div>
         )}
 
         <hr className="my-3 border-[var(--line)]" />

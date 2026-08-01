@@ -197,7 +197,13 @@ export default function CombatScreen() {
                 className="pointer-events-none absolute inset-3 z-10 rounded-[18px] border-2 border-dashed border-[#C9D8F7] bg-[var(--blue-soft)]/20"
               />
             )}
-            <HopeCounter hope={state.hope} seuil={seuil} fx={fx} subline={subline} />
+            <HopeCounter
+              hope={state.hope}
+              seuil={seuil}
+              fx={fx}
+              subline={subline}
+              turnsLeft={Math.max(0, blind.maxTurns - state.turn + 1)}
+            />
           </div>
 
           <div className="grid grid-cols-3 gap-2.5 px-3.5 pb-1 pt-2 lg:gap-4 lg:px-6">
@@ -221,13 +227,30 @@ export default function CombatScreen() {
           </div>
 
           <div className="flex gap-2 px-4 pb-1.5 pt-2.5 lg:gap-3 lg:px-6 lg:pt-4">
-            <button
-              onClick={canLeaveHere ? store.endTurn : store.passTurn}
-              disabled={frozen || (!canLeaveHere && state.playedThisTurn)}
-              className="flex-1 cursor-pointer rounded-[var(--radius)] border border-[var(--line)] bg-[var(--panel)] p-3.5 text-[13.5px] font-bold text-[var(--muted)] hover:enabled:bg-[#EEF1F6] disabled:cursor-default disabled:opacity-30 lg:p-4 lg:text-[14.5px]"
-            >
-              {canLeaveHere ? 'Attendre encore' : 'Passer le tour'}
-            </button>
+            {/* Une interdiction muette se lit comme un bug : on dit pourquoi. */}
+            <div className="relative flex-1">
+              <button
+                onClick={canLeaveHere ? store.endTurn : store.passTurn}
+                disabled={frozen || (!canLeaveHere && state.playedThisTurn)}
+                title={
+                  !canLeaveHere && state.playedThisTurn
+                    ? 'Vous vous êtes déjà manifesté ce tour.'
+                    : undefined
+                }
+                className="w-full cursor-pointer rounded-[var(--radius)] border border-[var(--line)] bg-[var(--panel)] p-3.5 text-[13.5px] font-bold text-[var(--muted)] hover:enabled:bg-[#EEF1F6] disabled:cursor-default disabled:opacity-30 lg:p-4 lg:text-[14.5px]"
+              >
+                {canLeaveHere ? 'Attendre encore' : 'Passer le tour'}
+              </button>
+              {!canLeaveHere && state.playedThisTurn && playing && (
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="pointer-events-none absolute inset-x-0 -top-4 text-center text-[10.5px] text-[var(--muted)]"
+                >
+                  Vous vous êtes déjà manifesté ce tour.
+                </motion.span>
+              )}
+            </div>
             <motion.button
               onClick={canLeaveHere ? store.leave : store.endTurn}
               disabled={frozen}
