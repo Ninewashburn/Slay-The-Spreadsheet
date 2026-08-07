@@ -300,6 +300,9 @@ si l'offre revient TRÈS vite (quelques runs) et À L'IDENTIQUE, ce n'est pas un
 seconde chance ambiguë mais un signal plus sombre — soit le poste n'a jamais
 tenu, soit le process ne visait jamais vraiment à recruter. Le joueur apprend à
 lire ce signal avec l'expérience (savoir, pas texte explicatif — cohérent §10).
+**Contre-indication** : une candidature refusée par *La Société Confidentielle*
+(§7) est définitivement hors de portée d'Ancien Contact. On ne relance pas un
+nom qu'on n'a jamais eu.
 
 ### Actes II+ (parqués)
 ESN (« Le client cherche surtout quelqu'un de polyvalent » → transforme les
@@ -412,7 +415,10 @@ jamais une ressource — un chiffre à côté de l'effet réel en Espoir.
 ### Malédictions
 **Le Template Non Rempli** — « Merci pour votre candidature chez
 `[#enseigne.nom#]` ». 0 dégât. Tu ne sauras jamais de qui. **La
-carte-signature du jeu** — à mettre en avant dans la communication. ·
+carte-signature du jeu** — à mettre en avant dans la communication.
+*Note croisée* : ne pas la confondre avec **La Société Confidentielle** (§7).
+Ici le système est CASSÉ et la couture est visible ; là il est PARFAIT et ne
+contient personne. Les deux faces du même dispositif, à garder distinctes. ·
 « Cependant » (tampon rouge : annule les bonus du tour) · Nous avons retenu un
 autre profil (carte morte jusqu'à la fin de la run) · Manque d'expérience (ne
 fait rien, occupe une place) · Salaire selon profil (effet inconnu. Vraiment
@@ -428,6 +434,22 @@ est plus rapide que la run 1. · Recommandations LinkedIn (à 5 : passif
 « Crédibilité ») · Double CV LaTeX/Canva (deux faces : ATS / humaine) ·
 Casque antibruit (immunité aux réunions — Acte III, parqué).
 
+**Palier avancé — l'objet muet.** Le bout logique de la courbe : le refus se
+reconnaît AVANT l'ouverture. L'objet du mail ne contient aucune information,
+juste trois points de suspension, et pourtant le destinataire sait déjà. C'est
+le tell le plus en amont de toute la chaîne : plus le mot pivot dans le corps du
+message, mais l'absence de contenu dans l'objet.
+
+| Palier | Ce que le joueur reconnaît | Effet |
+|---|---|---|
+| Run 1 | rien | le mail défile en entier, imblocable une fois |
+| Relique acquise | les trois premiers mots | le mail est sauté |
+| **Palier avancé** | **l'objet seul, sans ouvrir** | **le mail n'apparaît même plus** |
+
+Pool d'objets, entièrement creux, sans aucun mot pivot : « Suite à votre
+candidature... » · « Votre candidature » · « Concernant votre dossier ».
+Aucun ne dit non. Tous sont reconnaissables. C'est exactement le point.
+
 ## 7. Les écrans de fin (les blinds ne parlent qu'ici)
 
 | Fin | Écran |
@@ -442,6 +464,47 @@ Casque antibruit (immunité aux réunions — Acte III, parqué).
 Le YOU DIED de Dark Souls est le vocabulaire, pas la blague : la solennité est
 MÉRITÉE (tu viens réellement de perdre quelque chose). Référence = étage bonus,
 jamais plancher.
+
+### La Société Confidentielle — la ligne de mort qui FERME une option
+
+Un refus reçu via une plateforme intermédiaire, où le nom de l'entreprise est
+remplacé partout par « Société Confidentielle » : dans l'ouverture, dans la
+signature, sans en-tête ni adresse. Le système fonctionne de bout en bout,
+poliment, complètement, et il ne contient aucune personne. On a postulé à un
+vide, le vide a répondu, et le vide remercie de l'intérêt qu'on lui porte.
+
+Plus glaçant que Le Template Non Rempli précisément parce qu'il n'a **aucun
+défaut** :
+
+| | Le Template Non Rempli | La Société Confidentielle |
+|---|---|---|
+| État du système | **cassé**, la couture est visible | **parfait**, aucune erreur |
+| Ce qu'on apprend | qu'un template existe | rien du tout |
+| Nature | une négligence | une **configuration voulue** |
+| Effet | on ne sait pas de qui ça vient | il n'y a personne |
+
+**⚠ Conséquence mécanique (le point capital)** : si le joueur ne sait pas qui
+l'a refusé, il ne peut ni relancer, ni recontacter, ni reconnaître l'offre si
+elle revient dans une run ultérieure. **Ce refus rend la relique *Ancien
+Contact* injouable sur cette candidature.** Aucune autre ligne de mort du jeu ne
+fait ça : c'est la première qui n'est pas seulement du flavor. Même famille que
+*Exclusivité* (qui retire des cartes) et *« On est une famille »* (qui verrouille
+Partir) : les effets qui FERMENT au lieu de diminuer.
+
+**Écriture (premier degré strict)** : le mot « confidentielle » apparaît partout
+où un nom devrait être, sans le moindre commentaire. « Nous vous remercions de
+l'intérêt que vous portez à Société Confidentielle. » puis la formule de refus
+standard, puis « L'équipe de recrutement, Société Confidentielle ». Aucun
+en-tête, aucune adresse, aucun expéditeur identifiable. La répétition du même mot
+vide à chaque emplacement est toute la blague.
+
+**Note de conception commune avec l'objet muet (§6, Reliques)** : les deux
+variantes prolongent la même idée dans deux directions opposées. L'objet muet
+arrive si en amont qu'il n'a plus besoin d'être lu : le joueur **gagne du
+temps**. La Société Confidentielle est complète, polie, impeccable, et ne livre
+rien : le joueur **perd une option**. L'une récompense l'expérience, l'autre la
+neutralise. À placer dans des pools DIFFÉRENTS pour que le contraste se vive en
+jouant, jamais dans le même tirage.
 
 **Dispositif — le boss épique sur enjeu dérisoire** : présenter un blind avec
 tout l'apparat d'un boss (barre massive, nom en capitales, solennité, musique)
