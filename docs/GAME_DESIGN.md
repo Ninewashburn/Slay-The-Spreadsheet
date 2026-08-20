@@ -416,9 +416,11 @@ jamais une ressource — un chiffre à côté de l'effet réel en Espoir.
 **Le Template Non Rempli** — « Merci pour votre candidature chez
 `[#enseigne.nom#]` ». 0 dégât. Tu ne sauras jamais de qui. **La
 carte-signature du jeu** — à mettre en avant dans la communication.
-*Note croisée* : ne pas la confondre avec **La Société Confidentielle** (§7).
-Ici le système est CASSÉ et la couture est visible ; là il est PARFAIT et ne
-contient personne. Les deux faces du même dispositif, à garder distinctes. ·
+*Note croisée* : trois fiches partagent ce dispositif et ne doivent jamais être
+confondues (table comparative en §7). Ici le système est CASSÉ et la couture est
+visible ; **La Société Confidentielle** est PARFAITE et ne contient personne ;
+**Le prénom interverti** est parfait lui aussi, mais rempli avec les données de
+quelqu'un d'autre. ·
 « Cependant » (tampon rouge : annule les bonus du tour) · Nous avons retenu un
 autre profil (carte morte jusqu'à la fin de la run) · Manque d'expérience (ne
 fait rien, occupe une place) · Salaire selon profil (effet inconnu. Vraiment
@@ -474,14 +476,15 @@ poliment, complètement, et il ne contient aucune personne. On a postulé à un
 vide, le vide a répondu, et le vide remercie de l'intérêt qu'on lui porte.
 
 Plus glaçant que Le Template Non Rempli précisément parce qu'il n'a **aucun
-défaut** :
+défaut**. Les trois états de la même famille, à garder distincts :
 
-| | Le Template Non Rempli | La Société Confidentielle |
-|---|---|---|
-| État du système | **cassé**, la couture est visible | **parfait**, aucune erreur |
-| Ce qu'on apprend | qu'un template existe | rien du tout |
-| Nature | une négligence | une **configuration voulue** |
-| Effet | on ne sait pas de qui ça vient | il n'y a personne |
+| | Le Template Non Rempli | La Société Confidentielle | Le prénom interverti |
+|---|---|---|---|
+| État du champ | **cassé**, la couture est visible | **vide par conception**, rempli de néant | **rempli, avec les données de quelqu'un d'autre** |
+| État du système | cassé | parfait | parfait |
+| Ce qu'on apprend | qu'un template existe | rien du tout | qu'un autre candidat existe, et qu'on vous a confondus |
+| Nature | une négligence | une configuration voulue | une substitution |
+| Effet | on ne sait pas de qui ça vient | il n'y a personne | vous êtes interchangeable |
 
 **⚠ Conséquence mécanique (le point capital)** : si le joueur ne sait pas qui
 l'a refusé, il ne peut ni relancer, ni recontacter, ni reconnaître l'offre si
@@ -506,6 +509,71 @@ rien : le joueur **perd une option**. L'une récompense l'expérience, l'autre l
 neutralise. À placer dans des pools DIFFÉRENTS pour que le contraste se vive en
 jouant, jamais dans le même tirage.
 
+### Le prénom interverti — le troisième état de la famille Template
+
+Le mail est **parfaitement fonctionnel**. Aucune erreur technique, aucune
+variable oubliée. Simplement, il s'adresse à quelqu'un d'autre : quelque part il
+y a un autre candidat, il porte un autre prénom, et le système vous a
+interchangés. Le joueur n'est pas face à un bug, il est face à sa propre
+substituabilité. Voir la table des trois états ci-dessus.
+
+**Écriture** : le prénom employé doit être **générique et neutre**, jamais celui
+d'une personne identifiable (CLAUDE.md §2). Le contraste suffit à lui seul : le
+joueur connaît son nom, le mail en affiche un autre, le jeu n'ajoute aucun
+commentaire.
+
+### L'artefact `[OBJ]` — quand le décor s'effondre techniquement
+
+Un objet embarqué (signature, logo) qui n'a pas survécu au transfert et
+s'affiche comme un rectangle vide en bas du message. **Complémentaire du
+Template Non Rempli, pas redondant** : là c'est une VARIABLE non fusionnée, ici
+c'est un ARTEFACT DE MISE EN FORME. Deux façons différentes dont le décor
+administratif s'effondre. À utiliser avec parcimonie : c'est un détail visuel,
+pas une ligne de texte.
+
+### Le refus chaleureux — un registre absent de la banque
+
+Toutes les lignes de mort existantes sont froides et polies. C'est leur force
+(le déadpan institutionnel). Celle-ci fait l'inverse : « Bonne journée ;) ». Un
+clin d'œil dans un message qui annonce un refus.
+
+**Ce n'est pas de la malveillance**, c'est de la décontraction déplacée : le
+rédacteur ne perçoit pas le poids de ce qu'il envoie. Ça pique DIFFÉREMMENT du
+glacial, et le contraste enrichit le pool : un refus chaleureux se lit comme une
+conversation entre gens qui ne vivent pas la même scène. Parfaitement cohérent
+avec le garde-fou de ton, personne n'est méchant, c'est le décalage qui fait mal.
+
+**Garde-fou d'écriture** : rester au premier degré. Ne JAMAIS souligner
+l'incongruité par un commentaire du jeu. L'émoticône seul suffit.
+
+### ⚠ La rétrogradation — une quatrième issue de run (à valider en playtest)
+
+Le mail refuse **et propose moins dans la même respiration** : « Vous n'êtes pas
+retenu pour le poste. Néanmoins, nous maintenons notre rendez-vous pour une
+éventuelle alternance. » Le mot pivot ne sert pas à annoncer le non, il sert de
+charnière vers l'offre dégradée.
+
+Ni victoire, ni game over : une issue inédite, à ranger à côté de l'écran passif
+(qui était déjà un troisième état).
+
+| Issue | Ce qui se passe |
+|---|---|
+| `won` | seuil atteint, run réussie |
+| `lost` | Espoir brisé ou sous le seuil |
+| `passive` | survécu sans s'engager, ni puni ni récompensé |
+| **`downgraded`** | **refusé, mais la run continue avec un objectif dégradé** |
+
+**Effet proposé** : la run ne s'arrête pas. Le seuil baisse, la récompense
+affichée baisse d'autant, et le joueur poursuit, avec le choix implicite
+d'accepter ou d'abandonner. Aucune autre issue ne pose cette question :
+continuer, c'est accepter moins ; s'arrêter, c'est n'avoir rien. Le jeu ne
+tranche pas et ne commente pas, il laisse le joueur décider, ce qui est
+exactement la position réelle.
+
+⚠ **À valider en playtest AVANT implémentation** : une quatrième issue
+complexifie le reducer et l'UI de fin. Vérifier qu'elle produit un vrai dilemme
+et pas une simple consolation.
+
 **Dispositif — le boss épique sur enjeu dérisoire** : présenter un blind avec
 tout l'apparat d'un boss (barre massive, nom en capitales, solennité, musique)
 pour un enjeu ridicule (« répondre à une offre de stagiaire »). L'emballage
@@ -526,6 +594,17 @@ L'offre EST le niveau : ses « avantages » sont les modificateurs de règles
 (Papers Please : inspecter le document, chercher l'incohérence).
 Red flags canon : Salaire selon profil · Jeune équipe dynamique · Autonome ·
 Polyvalent · Poste évolutif · On est une famille · Babyfoot.
+
+**Règle du cumul d'anomalies** : chaque défaut isolé est une négligence ; quatre
+ensemble, c'est un système qui ne se relit plus. Le cumul produit une blague que
+l'unité ne produit pas (source : un refus réel contenant, en cinq lignes, un
+prénom interverti, un artefact de mise en forme, un émoticône et une
+rétrogradation). Le générateur doit donc pouvoir empiler plusieurs anomalies dans
+un même message, mais à **fréquence basse** : c'est un événement remarquable, pas
+la norme. Si c'est fréquent, l'effet s'annule (le joueur s'habitue) et la satire
+devient de la caricature. Une anomalie par refus reste le cas courant, et le
+refus **parfait**, glacialement correct, doit rester MAJORITAIRE : c'est lui qui
+rend les anomalies visibles.
 
 ## 9. Les profils (V1.5)
 
@@ -643,6 +722,10 @@ passif · design sonore · le nom public.
   pour junior » inaccessibles, forçant à pivoter (Management, Reconversion).
   Meilleure formulation que le profil Senior statique (§9) : ici le temps est une
   dérive subie, pas un choix de départ.
+- **La rétrogradation** (issue `downgraded`, spec complète en §7) : être refusé
+  et se voir proposer moins dans la même phrase, sans que la run s'arrête. Seule
+  issue qui pose la question « continuer, c'est accepter moins ». Complexifie le
+  reducer et l'UI de fin : à valider en playtest avant d'implémenter.
 
 **Garde-fous de vigilance (reconfirmés, ne rien changer)** : le joueur est la
 victime faillible d'un processus absurde, JAMAIS le tricheur — rejeter toute
