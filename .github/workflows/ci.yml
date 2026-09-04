@@ -1,0 +1,45 @@
+# CI — le moteur est du TypeScript pur (CLAUDE.md §5) : il se vérifie sans
+# navigateur, sans jsdom, sans serveur. Quatre portes, de la plus rapide à la
+# plus lente, pour que l'échec soit nommé au lieu d'être deviné.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Une seule exécution utile par branche : un push qui en suit un autre annule
+# le précédent.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Types, lint, moteur, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Types (strict, noUncheckedIndexedAccess, zéro any)
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Moteur (vitest)
+        run: npm test
+
+      - name: Build de production
+        run: npm run build

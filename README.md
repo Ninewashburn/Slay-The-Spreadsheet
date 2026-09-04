@@ -1,5 +1,7 @@
 # Slay the Spreadsheet (nom interne)
 
+[![CI](https://github.com/Ninewashburn/Slay-The-Spreadsheet/actions/workflows/ci.yml/badge.svg)](https://github.com/Ninewashburn/Slay-The-Spreadsheet/actions/workflows/ci.yml)
+
 Deckbuilding roguelike satirique sur la recherche d'emploi. Le deck = ton
 profil. Les blinds = les étapes d'un process. L'**Espoir** est ton score — et
 la seule chose par laquelle le jeu peut te blesser.
@@ -12,7 +14,7 @@ la seule chose par laquelle le jeu peut te blesser.
 
 ```bash
 npm install
-npm test        # le moteur : 56 tests, dont les 3 bugs de playtest en non-régression
+npm test        # le moteur : 64 tests, dont les 3 bugs de playtest en non-régression
 npm run dev     # http://localhost:3000 — l'Acte I : « Postuler » → job board → 5 étapes
 ```
 
@@ -42,7 +44,7 @@ assemblé, écrit lettre par lettre : imblocable la première fois, puis la reli
 
 ```
 CLAUDE.md               # les règles dures (thèse, ton, architecture, DA)
-ROADMAP.md              # versions scoppées — on n'implémente QUE la courante
+ROADMAP.md              # versions scopées — on n'implémente QUE la courante
 docs/
   GAME_DESIGN.md        # la banque : blinds, cartes, écrans, journal de playtest
   proto-espoir-v5.html  # le proto validé — référence de comportement ET de style

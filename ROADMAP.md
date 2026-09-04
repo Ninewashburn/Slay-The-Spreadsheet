@@ -3,7 +3,7 @@
 > Règle : on n'implémente **que** la version courante. Les idées hors scope
 > vont dans `docs/GAME_DESIGN.md` (sections « parqué »), jamais dans le code.
 > État actuel : **V1 (Acte I) LIVRÉE** — job board, générateur par assemblage,
-> 5 blinds, système des mots, relique et succès. Moteur pur : 56 tests.
+> 5 blinds, système des mots, relique et succès. Moteur pur : 64 tests.
 > Prochaine version : V1.5 (profils + blinds vécus). Tout le calibrage de la V1
 > (seuils, couches, pénalités) attend le playtest.
 
