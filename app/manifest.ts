@@ -1,6 +1,12 @@
 import type { MetadataRoute } from 'next';
 
 /**
+ * Le manifest est une route : sans cette ligne, `output: 'export'` refuse de la
+ * rendre. Elle était déjà statique de fait, on ne fait que le déclarer.
+ */
+export const dynamic = 'force-static';
+
+/**
  * Le manifest PWA : le jeu s'installe sur l'écran d'accueil (Android), plein
  * écran, portrait, comme une app. Le déterminisme du moteur rend l'app 100 %
  * cliente : aucune dépendance serveur, donc exportable et empaquetable (V2).
