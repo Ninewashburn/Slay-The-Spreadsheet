@@ -260,7 +260,11 @@ chaîne d'intermédiaires, l'Exclusivité montre le coût d'y entrer. Elles peuv
 former un mini-acte cohérent, l'Exclusivité étant trouvée juste avant le blind
 à couches.
 
-### Blinds vécus (V1.5) — extraits de 8 histoires réelles, 8 causes de mort distinctes, zéro méchant
+### Blinds vécus (V1.5) — extraits de 9 histoires réelles, 8 causes de mort distinctes, zéro méchant
+
+La neuvième ne tue pas : Le Commercial est le seul de la section qui n'a pas de
+ligne de mort. Il part.
+
 | Blind | Origine | Règle | Ligne de mort |
 |---|---|---|---|
 | **Le Gel Budgétaire** | « Je vous prends, je ne sais pas quand » puis silence | Victoire à 100 % possible — et défaite quand même, sur une variable hors-champ, sans auteur. Le jeu n'annonce jamais la défaite. | « La bonne nouvelle : le poste est à vous. La mauvaise : nous ne savons pas quand. » puis rien |
@@ -271,6 +275,7 @@ former un mini-acte cohérent, l'Exclusivité étant trouvée juste avant le bli
 | **Le Marathon** | Technique validée, éliminé sur des signes de stress en fin d'entretien long | Le SEUL blind dont le risque dépend du TEMPS, pas de l'Espoir : `computeRisk = f(turn)`. Il offre plus de tours que nécessaire (seuil atteignable en 4, il en donne 8) — le piège est de les utiliser. Le critère réel n'est jamais annoncé. Leçon apprise en jouant : finis vite, pars. | « Nous avons perçu quelques signes de nervosité en fin d'échange. » |
 | **Le Doute** | Rituel qualités/défauts (« Si vous étiez un animal ? »), une phrase honnête → « on a tiqué », débrief des jours après | Un flag caché IRRÉVERSIBLE, posé par une seule carte — et le jeu ne dit pas laquelle ni quand : on l'apprend à l'écran de fin. Les déclencheurs sont les cartes HONNÊTES (Le Trou de CV Expliqué, la transparence) — bonnes partout ailleurs, fatales ici. La valeur d'une carte est contextuelle (cf. Le Diplôme). Aucune carte ne retire le doute. | « S'il y a un doute, c'est qu'il n'y a pas de doute. » |
 | **Le Consultant Loyal** | Deux interlocuteurs de la même organisation, deux postures opposées sur la même info : la RH nomme le client spontanément, le Consultant (loyal à un ami côté client) ne le mentionne jamais | Deux phases, pas un seuil probabiliste. Phase RH : révèle « Client : [nom fictif générique] ». Phase Consultant : ne révèle rien ; l'action **Reprendre l'info** (1 Énergie) force le sujet en citant la RH et débloque de la visibilité PURE — zéro Espoir, zéro garantie. Le tell n'est pas un détail annexe : c'est l'INCOHÉRENCE entre les deux interlocuteurs. Défaite pré-arbitrée par la loyauté, possible même en forçant la question correctement. | « Le poste a été confié à un profil recommandé en interne. » |
+| **Le Commercial** | Entretien téléphonique : 20 min de retard sans excuse, acquiescements distraits, question sur une candidature déjà refusée, rappel jamais tenu | Le premier tour est **sauté**. Une carte jouée peut être « acquiescée » : l'Énergie est dépensée, l'effet est annulé. Il part après N tours **quoi que fasse le joueur**, en laissant la malédiction *Silence Radio*. On ne le bat pas, on s'en débarrasse. Fiche détaillée ci-dessous. | **Aucune.** Il ne tue pas, il part. |
 
 Leçon commune Gel/Relais : *parfois on perd contre une horloge, pas contre un
 adversaire* — l'horloge en amont (budget) ou en aval (dossier qui chemine).
@@ -304,6 +309,141 @@ lire ce signal avec l'expérience (savoir, pas texte explicatif — cohérent §
 (§7) est définitivement hors de portée d'Ancien Contact. On ne relance pas un
 nom qu'on n'a jamais eu.
 
+#### Fiche — Le Commercial
+
+**Origine (réelle, septembre 2026)** : un entretien téléphonique. Vingt minutes
+de retard sans excuse, des acquiescements distraits, une question sur une
+candidature précédente déjà refusée, une promesse de rappel jamais tenue.
+
+**Le nom** : « Le Commercial », jamais « Le Commercial ESN ». Le sigle rétrécit
+la lecture à un secteur, alors que le comportement décrit est celui de n'importe
+quel intermédiaire qui vous fait attendre sans vous écouter (CLAUDE.md §3, cible
+= tout le monde).
+
+**Le principe** : ce blind n'attaque presque pas l'Espoir. Il vole des tours et
+neutralise des actions. La frustration doit venir du **temps perdu**, pas des
+dégâts subis. C'est ce qui le rend compatible avec l'architecture sans PV.
+
+**⚠ Pas de PV, pas de « mort »** : le brouillon prévoyait « à 0 PV, il quitte le
+combat ». Même correction que pour La Poupée Russe (CLAUDE.md §1 : un blind est
+une règle et un seuil, jamais une créature). Version correcte, et plus juste
+thématiquement : **le Commercial quitte le combat après un nombre de tours fixe,
+quoi que fasse le joueur**. On ne le fait pas partir, il part quand il a fini.
+Le joueur n'a aucune prise sur sa sortie, seulement sur ce qu'il parvient à
+sauver entre-temps.
+
+**Placement** : rangé ici, avec les blinds vécus, et non dans les Actes II+ que
+le brouillon visait. Deux raisons : c'est une histoire réelle datée, comme les
+huit autres de cette section ; et « Acte II = ESN » est exactement le
+rétrécissement sectoriel que son propre nom refuse.
+
+##### Les quatre mécaniques
+
+**Ouverture — Retard.** Le premier tour est sauté. Aucune carte jouable, aucun
+effet déclenché. Le blind entre en jeu au tour 2, sans justification affichée.
+Le combat commence en ayant déjà perdu quelque chose : le thème est installé
+avant la première décision du joueur.
+
+**Passif — Écoute Distraite.** Chaque carte jouée a une probabilité d'être
+« acquiescée » : elle est jouée, l'Énergie est dépensée, la carte part à la
+défausse, et son effet est annulé. Feedback visuel minimal (« hm hm »).
+
+**Attaque — Ça a donné quoi ?** Effet proportionnel au nombre de cartes dans la
+défausse. Plus le joueur a agi, plus l'attaque est forte.
+
+**Attaque — Je reviens vers vous.** Applique un effet à retardement avec
+compteur visible. Au terme du compte à rebours, le compteur **se réinitialise**
+au lieu de se résoudre. L'effet ne se déclenche jamais.
+
+**Résolution** : le blind part après ses N tours. Le joueur reçoit la
+malédiction *Silence Radio* (§6), ajoutée au deck. On ne gagne pas contre lui,
+on s'en débarrasse.
+
+##### ⚠ Réserve d'équilibre (à trancher AVANT d'implémenter)
+
+Le brouillon estimait que *Ça a donné quoi ?* était la seule des quatre
+mécaniques à créer une vraie décision, les trois autres ne faisant que retirer
+des options. Vérification faite, c'est plus grave que ça : **cet axe-là n'est
+pas neuf**. « Jouer peu devient viable » est déjà la règle centrale de
+Prétentions Salariales (Acte I, implémenté : *Passer est le coup optimal*) et le
+ressort de l'entretien de groupe (§14). En l'état, Le Commercial n'apporte donc
+**aucun arbitrage original** : trois privations et une redite.
+
+Un blind entièrement composé de privations est **pénible, pas tendu**. Deux
+pistes, à tester avant toute implémentation :
+- une action **« recentrer la conversation »** (coût en Énergie, supprime le
+  passif pour un tour), cousine de *Reprendre l'info* du Consultant Loyal ;
+- un **seuil réduit** en compensation du temps volé, qui rend la partie jouable
+  malgré le tour perdu.
+
+**Priorité** : après les correctifs de lisibilité, jamais avant.
+
+##### Chevauchements à documenter
+
+Sans ces notes, des entités redondantes seront créées.
+
+**1. Écoute Distraite ↔ le gimmick de l'ATS**
+
+| | ATS | Le Commercial |
+|---|---|---|
+| Moment | **bloque AVANT** — la carte est injouable, c'est visible | **annule APRÈS** — la carte est jouée, rien ne se passe |
+| Coût pour le joueur | aucun (il ne joue pas la carte) | **l'Énergie est perdue** |
+| Prévisibilité | déterministe (mot-clé exact) | probabiliste |
+
+La distinction tient. Le second est plus cruel précisément parce qu'on a payé.
+
+**2. Écoute Distraite ↔ Le Manager Pressé (Actes II+)** — le vrai risque de
+doublon, et celui que le brouillon avait manqué. « Je n'ai eu que cinq minutes »
+ignore les cartes puissantes ; l'Écoute Distraite annule n'importe quelle carte,
+au hasard. Même geste, même cause (l'interlocuteur est ailleurs). Si les deux
+sont un jour implémentés, ils doivent différer sur la **cible** : le Manager
+ignore ce qui compte, le Commercial n'écoute rien en particulier. Sinon, n'en
+garder qu'un.
+
+**3. « Je reviens vers vous » n'entre en conflit avec aucune carte.** Le
+brouillon supposait qu'une carte de ce nom existait déjà en banque. Vérifié :
+elle n'existe ni en §6 ni dans `lib/engine/cards.ts`. La seule occurrence de la
+phrase est en §12, comme piste de **murmure d'ambiance** (nos propres murmures à
+la place du peon de Warcraft). Garder le même nom pour les deux est délibéré :
+le blind dit tout haut ce que le jeu murmure. La carte la plus proche en banque
+est *« On vous rappelle vendredi »* (+3/tour, meurt vendredi) — plus cruelle,
+parce qu'elle paie d'abord.
+
+**4. Silence Radio ↔ Le Ghosteur.** Ce n'est pas un doublon si on le formule
+ainsi : **le Ghosteur EST le silence ; le Commercial le laisse derrière lui.**
+L'un est un adversaire, l'autre une séquelle.
+
+**5. Le Commercial ↔ Le Relais.** Les deux naissent d'un intermédiaire qui fait
+attendre. Le Relais perd sur une **horloge invisible** qui court en parallèle :
+on peut tout réussir et perdre à la vitesse. Le Commercial ne cache rien, il
+prend le temps **devant** le joueur. L'un est une course ignorée, l'autre une
+attente subie.
+
+**6. Le Commercial ↔ Le Recruteur LinkedIn (§11).** Même psychologie :
+enthousiaste, ailleurs, ne retrouve plus la notif, disparaît. La différence est
+de **statut**, et elle doit être tenue : le Recruteur LinkedIn est le PNJ
+récurrent, la chaleur du jeu, on ne le combat jamais. Le Commercial est un
+blind, on le subit une fois. Ne jamais les fusionner, ne jamais leur donner le
+même avatar.
+
+##### Note de ton
+
+Le Commercial n'est pas malveillant : il est ailleurs. Aucune ligne du blind ne
+doit suggérer du mépris — c'est la distraction, pas l'hostilité, qui fait le
+personnage. La cible reste le processus (CLAUDE.md §2).
+
+##### Vérifications techniques avant intégration
+
+- Effets exprimés comme **données interprétées par le résolveur unique**
+  (`effects.ts`), jamais de logique en dur dans le blind. L'union `Effect`
+  actuelle ne sait ni annuler ni sauter : les trois nouveautés (tour sauté,
+  effet annulé, compteur qui se réinitialise) demandent de nouveaux `kind`.
+- Le **tour sauté doit être un état distinct de « tour passé »** : il ne doit pas
+  contourner l'interdiction de Passer après avoir joué une carte
+  (`playedThisTurn`).
+- Le compteur qui se réinitialise ne doit laisser **aucun état résiduel** entre
+  combats : rien hors de `GameState` (CLAUDE.md §5, les trois bugs du proto).
+
 ### Actes II+ (parqués)
 ESN (« Le client cherche surtout quelqu'un de polyvalent » → transforme les
 rares en communes), Négociateur TJM (« On n'a pas le budget » → chaque chiffre
@@ -323,6 +463,13 @@ Russe (Acte I). La Cascade ANNULE ta progression à chaque étape (on recommence
 la Poupée Russe DÉPLACE la cible en relevant le seuil (on n'arrive jamais), et
 sa récompense fond à chaque couche. Voir la table de comparaison dans la fiche
 de La Poupée Russe.
+
+**Note croisée — Manager Pressé** : son gimmick (« Je n'ai eu que cinq minutes »
+→ ignore les cartes puissantes) recoupe frontalement l'Écoute Distraite du
+Commercial (V1.5), qui annule des cartes jouées au hasard. Même geste, même
+cause : l'interlocuteur est ailleurs. S'ils coexistent, ils doivent différer sur
+la CIBLE — le Manager ignore ce qui compte, le Commercial n'écoute rien en
+particulier. Sinon, n'en garder qu'un. Voir la fiche du Commercial.
 
 ### Événements d'ambiance (entre deux blinds, V1.5)
 Pas des blinds : des interruptions courtes pendant la recherche (concrétise la
@@ -426,6 +573,12 @@ autre profil (carte morte jusqu'à la fin de la run) · Manque d'expérience (ne
 fait rien, occupe une place) · Salaire selon profil (effet inconnu. Vraiment
 inconnu.) · Burn-out, Imposteur (+1 coût partout), Dette Technique · **Trop
 bougé** (job-hopping puni, tampon rouge).
+
+**Silence Radio** — laissée par Le Commercial en partant (§5), ajoutée au deck
+pour le reste de la run. **Effet à définir** : la fiche du blind pose la
+malédiction, pas encore sa règle. *Note croisée* : ne pas la confondre avec le
+Ghosteur. Le Ghosteur EST le silence, on le combat ; Silence Radio est ce que le
+silence laisse derrière lui, on le traîne.
 
 ### Reliques
 **Expérience du candidat** — tu reconnais un refus aux trois premiers mots ;
@@ -668,6 +821,13 @@ ridicule.
 Terrain concret : le **message privé**. Il t'aborde en DM, s'enthousiasme, « je
 ne retrouve plus la notif », disparaît. Le vent en message privé, le « c'était
 juste pour agrandir mon réseau ».
+
+**Note croisée — Le Commercial (blind vécu, §5)** : même psychologie exactement
+(enthousiaste, ailleurs, ne retrouve plus rien, disparaît). La différence est de
+STATUT et doit être tenue : le Recruteur LinkedIn est le PNJ récurrent, la
+chaleur du jeu, on ne le combat jamais et on finit content de le voir ; Le
+Commercial est un blind, on le subit une fois et il laisse une malédiction. Ne
+jamais les fusionner, ne jamais leur donner le même avatar.
 
 ## 12. Références (le rôle exact de chacune)
 

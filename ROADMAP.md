@@ -110,7 +110,12 @@ pas des extractions : à remplacer par de vraies phrases reçues.
   lu comme un trou).
 - Blinds issus du vécu (specs complètes dans GAME_DESIGN.md §Blinds vécus) :
   Le Gel Budgétaire, Le Relais, La Mutation Interne, Le Guichet Anonyme,
-  L'Entretien Différé, Le Marathon, Le Doute.
+  L'Entretien Différé, Le Marathon, Le Doute, **Le Consultant Loyal** (apporte
+  l'action moteur « Reprendre l'info »), **Le Commercial**.
+  ⚠ Le Commercial est **bloqué en conception** tant que sa réserve d'équilibre
+  n'est pas levée : trois de ses quatre mécaniques ne font que retirer des
+  options, et la quatrième redit Prétentions Salariales. Ne pas implémenter
+  avant d'avoir tranché (voir sa fiche).
 - Audio : musique corporate, ding de notification (créé, pas Outlook).
 
 ## V2 — Persistance et mobile
