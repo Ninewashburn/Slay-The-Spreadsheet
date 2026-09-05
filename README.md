@@ -20,6 +20,22 @@ npm run dev     # http://localhost:3000 — l'Acte I : « Postuler » → job bo
 
 Sur Windows, `start.bat` fait tout (install au premier lancement, serveur, navigateur).
 
+## Diffusion
+
+L'app est 100 % cliente : aucun serveur, aucune base, tout se joue dans l'onglet.
+Elle s'exporte donc en fichiers statiques, sous deux formes selon la destination.
+
+```bash
+npm run build          # -> out/  chemins absolus, pour un hébergement web
+npm run build:offline  # -> out/  chemins relatifs, ouvrable par double-clic
+npm start              # sert out/ en local pour vérifier le build
+```
+
+`build:offline` produit un dossier de 24 fichiers (1,1 Mo) qui se zippe et se
+joue sans réseau : `out/index.html` s'ouvre directement dans un navigateur.
+La méta-progression y dépend du `localStorage`, que certains navigateurs
+refusent en `file://` ; la run reste jouable dans tous les cas.
+
 ## La run (V1)
 
 Cinq étapes. À chacune, un **job board** propose des offres générées : l'offre EST
